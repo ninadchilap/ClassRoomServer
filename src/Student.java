@@ -25,7 +25,11 @@ public class Student
 	
 	/* This Linked List will have the list of all the students */
 	static LinkedList<Student> studentList=new LinkedList<Student>();
-	
+
+	Student()
+	{
+		
+	}
 	Student(String studentName,String rollno,String macAddress,String pic,String doubtSubject,String textMessage,String doubtType)
 	{
 		this.textMessage=textMessage;
@@ -38,6 +42,15 @@ public class Student
 		if(doubtType.equals("audio")) // if the doubtType is audio then add the student to studentListAudio
 		{
 			textMessage="";
+			JButton tickButton=new JButton("\u2714");
+			JButton crossButton=new JButton("X");
+
+			ServerFrame.methodToAddActionListener(tickButton);
+			ServerFrame.methodToAddActionListener(crossButton);
+
+			ServerFrame.addButton.add(tickButton);
+			ServerFrame.deleteButton.add(crossButton);
+			
 			studentListAudio.add(this);
 		}
 		else if(doubtType.equals("text"))// if the doubtType is audio then add the student to studentListText
@@ -57,6 +70,8 @@ public class Student
 		{
 			studentList.add(this);
 		}
+		//new RefreshingThread(sf);
+		ServerFrame.refreshFrame();
 	}
 
 	public static LinkedList<Student> getStudentListText()
