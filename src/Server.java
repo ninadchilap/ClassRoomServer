@@ -218,34 +218,64 @@ class LoginThread implements Runnable
                	}
             	else{
                     //System.out.println("Audio doubt entered");
-				    username=dis.readUTF();
-				    roll=dis.readUTF();
-				    macid=dis.readUTF();
-				    doubtSubject=dis.readUTF();
-				    doubtText=dis.readUTF();
-				
-				    System.out.println("username="+username);
-				    System.out.println("roll="+roll);
-				    System.out.println("macid="+macid);
-				    System.out.println("doubtSubject="+doubtSubject);
-				    System.out.println("doubtText="+doubtText);
-				
+            		
+            		
+            		if("remove".equals(test))
+            		{
+            		macid=dis.readUTF();
+            		doubtSubject=dis.readUTF();
+            		doubtText=dis.readUTF();
+            		new Student("Saket","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+                	new Student("","",macid,"",doubtSubject,doubtText,"remove");
+            		dos.writeUTF("received");
+            		   client.close();
+            		           count=1;
+            		           break;
+            		}
+            		else
+            		{
+            			username=dis.readUTF();
+    				    roll=dis.readUTF();
+    				    macid=dis.readUTF();
+    				    doubtSubject=dis.readUTF();
+    				    doubtText=dis.readUTF();
+    				
+    				    System.out.println("username="+username);
+    				    System.out.println("roll="+roll);
+    				    System.out.println("macid="+macid);
+    				    System.out.println("doubtSubject="+doubtSubject);
+    				    System.out.println("doubtText="+doubtText);
+    				
+    				    
+    				    File outFile=new File("/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/"+macid+".jpg");
+    				    
+    				    receiveFile(outFile);
+    				
+    				    System.out.println(outFile.getAbsolutePath());
+    				    new print_in_file(macid,username,roll,doubtSubject,doubtText);
+    				    new Student(username,roll,macid,outFile.getAbsolutePath(),doubtSubject,doubtText,"text");
+    				
+    				
+    				    dos.writeUTF("received");
+    				
+    				
+    				    client.close();
+    				    count=1;
+    				    break;
+            		}
+            		               
+            		
+            		
+            		
+            		
+            		
+            		
+            		
+            		
+            		
+            		
+            		
 				    
-				    File outFile=new File("/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/"+macid+".jpg");
-				    
-				    receiveFile(outFile);
-				
-				    System.out.println(outFile.getAbsolutePath());
-				    new print_in_file(macid,username,roll,doubtSubject,doubtText);
-				    new Student(username,roll,macid,outFile.getAbsolutePath(),doubtSubject,doubtText,"text");
-				
-				
-				    dos.writeUTF("received");
-				
-				
-				    client.close();
-				    count=1;
-				    break;
             	}
             }
             catch(Exception e)

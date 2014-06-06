@@ -1,5 +1,5 @@
 /*
- * this class will store the student's information 
+ * this class will store the student's information  
  * 
  * Each student will have the following properties : 
  * 		studentName 	- The name of the student
@@ -9,7 +9,6 @@
  * 		doubtType 		- type of doubt - either "audio" or "text"
  */
 import java.util.LinkedList;
-
 import javax.swing.JButton;
 
 public class Student
@@ -65,6 +64,19 @@ public class Student
 			ServerFrame.addButtonText.add(tickButton);
 			ServerFrame.deleteButtonText.add(crossButton);
 			studentListText.add(this);
+		}
+
+		else if(doubtType.equals("remove"))
+		{
+			int flag_remove=0;
+			for(int i=0;i<studentListText.size()&&flag_remove==0;i++)
+			{
+				if(studentListText.get(i).macAddress.equals(macAddress)&&studentListText.get(i).doubtSubject.equals(doubtSubject)&&studentListText.get(i).textMessage.equals(textMessage) )
+				{
+					flag_remove=1;
+					studentListText.remove(i);
+				}
+			}
 		}
 		else if(doubtType.equals(""))// if the doubtType is not specified then add it to simple studentList
 		{
