@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -13,8 +14,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 
-public class GeneralDialogBox extends Dialog{
-	public GeneralDialogBox(JFrame serverFrame,Student student) {
+public class GeneralDialogBox extends Dialog
+{
+	public GeneralDialogBox(JFrame serverFrame,Student student) 
+	{
 		super(serverFrame,true);
 		setSize(800, 300);
 		setLocation(serverFrame.getWidth()/4,serverFrame.getHeight()/4);
@@ -67,18 +70,5 @@ public class GeneralDialogBox extends Dialog{
 	public Insets getInsets()
 	{
 		return new Insets(30,20,20,20);
-	}
-}
-
-class DlgAdapter extends WindowAdapter
-{
-	Dialog d;
-	DlgAdapter(Dialog d)
-	{
-		this.d=d;
-	}
-	public void windowClosing(WindowEvent we)
-	{
-		d.dispose();
 	}
 }

@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -56,52 +57,69 @@ class Server
 		 * these students have audio and text doubts
 		 */
     	
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	/*new Student("rakshit","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Kavleen","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("nonu","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Shanky","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("mohit","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("ankit","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Rahul","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-		
-    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional handling null pointer exception","please explain the null pointer exception","text");
-    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional handling null pointer exception","please explain the null pointer exception","text");
-    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional handling null pointer exception","please explain the null pointer exception","text");
-    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional handling null pointer exception","please explain the null pointer exception","text");
-    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional handling null pointer exception","please explain the null pointer exception","text");
-    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional handling null pointer exception","please explain the null pointer exception","text");
-    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional handling null pointer exception","please explain the null pointer exception","text");
-    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional handling null pointer exception","please explain the null pointer exception","text");
-    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional handling null pointer exception","please explain the null pointer exception","text");
-    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional handling null pointer exception","please explain the null pointer exception","text");
-    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional handling null pointer exception","please explain the null pointer exception","text");
-    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional handling null pointer exception","please explain the null pointer exception","text");
-		*/
-		new Server();
-        
+    	String filename= "Images/print.txt";
+        FileWriter fw;
+    try {
+    fw = new FileWriter(filename,false);
+    fw.write(String.format("%-20s%-20s%-20s%-20s%-10s", "MAC_ID", "USERNAME", "ROLL NO.","DOUBT TOPIC","DOUBT TEXT\n\n\n"));
+      fw.close();
+    } catch (IOException e1) {
+    // TODO Auto-generated catch block
+    e1.printStackTrace();
+    } //the true will append the new data
+       
+     
+
+    	new Student();
 		ServerFrame sf=new ServerFrame();
 		sf.setVisible(true);
 		sf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	/********************************************************************/
-    	
+    
+		new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Rakshit","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Kavleen","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Nonu","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Shanky","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Mohit","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Ankit","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Rahul","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Rakshit Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Kavleen Kalra","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Jasmeet","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Sameer","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Shanky","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Nehal Mehta","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Kritik Jaroli","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Vatsal","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Ujjawal","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Priyank","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Pooja Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Deepak","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Saket","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Kush Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Love Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Naveen","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+		
+    	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("Rakshit Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("Kavleen Kalra","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("Nonujeet","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("Love Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("Kush Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("Deepak","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("Pooja","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("abc agrawal","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("xyz sharma","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("pqr sharma","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("Lavish","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+	
+		new Server();
+		
+		sf.ipLabel.setText("IP Address : "+serverIpAddress);
+		sf.sessionIdLabel.setText("Session ID : "+serverSessionId);
+		
         System.out.println(sf.ipAddress+ "  hi lavsih kothair " +sf.sessionId);
 		try
         {
@@ -200,33 +218,64 @@ class LoginThread implements Runnable
                	}
             	else{
                     //System.out.println("Audio doubt entered");
-				    username=dis.readUTF();
-				    roll=dis.readUTF();
-				    macid=dis.readUTF();
-				    doubtSubject=dis.readUTF();
-				    doubtText=dis.readUTF();
-				
-				    System.out.println("username="+username);
-				    System.out.println("roll="+roll);
-				    System.out.println("macid="+macid);
-				    System.out.println("doubtSubject="+doubtSubject);
-				    System.out.println("doubtText="+doubtText);
-				
+            		
+            		
+            		if("remove".equals(test))
+            		{
+            		macid=dis.readUTF();
+            		doubtSubject=dis.readUTF();
+            		doubtText=dis.readUTF();
+            		new Student("Saket","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+                	new Student("","",macid,"",doubtSubject,doubtText,"remove");
+            		dos.writeUTF("received");
+            		   client.close();
+            		           count=1;
+            		           break;
+            		}
+            		else
+            		{
+            			username=dis.readUTF();
+    				    roll=dis.readUTF();
+    				    macid=dis.readUTF();
+    				    doubtSubject=dis.readUTF();
+    				    doubtText=dis.readUTF();
+    				
+    				    System.out.println("username="+username);
+    				    System.out.println("roll="+roll);
+    				    System.out.println("macid="+macid);
+    				    System.out.println("doubtSubject="+doubtSubject);
+    				    System.out.println("doubtText="+doubtText);
+    				
+    				    
+    				    File outFile=new File("/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/"+macid+".jpg");
+    				    
+    				    receiveFile(outFile);
+    				
+    				    System.out.println(outFile.getAbsolutePath());
+    				    new print_in_file(macid,username,roll,doubtSubject,doubtText);
+    				    new Student(username,roll,macid,outFile.getAbsolutePath(),doubtSubject,doubtText,"text");
+    				
+    				
+    				    dos.writeUTF("received");
+    				
+    				
+    				    client.close();
+    				    count=1;
+    				    break;
+            		}
+            		               
+            		
+            		
+            		
+            		
+            		
+            		
+            		
+            		
+            		
+            		
+            		
 				    
-				    File outFile=new File("/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/"+macid+".jpg");
-				    
-				    receiveFile(outFile);
-				
-				    System.out.println(outFile.getAbsolutePath());
-				    new Student(username,roll,macid,outFile.getAbsolutePath(),doubtSubject,doubtText,"text");
-				
-				
-				    dos.writeUTF("received");
-				
-				
-				    client.close();
-				    count=1;
-				    break;
             	}
             }
             catch(Exception e)
