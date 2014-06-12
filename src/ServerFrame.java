@@ -1,4 +1,14 @@
-import java.util.LinkedList;
+/*
+ * 
+ * This class contains all the basic gui coding
+ * of the main server screen visible to the Professor.
+ * 
+ * the top right area of the screen contains ip address
+ * and a randomly generated four digit session id.
+ * 
+ */
+
+import java.util.LinkedList; 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -12,14 +22,14 @@ import java.awt.event.*;
 public class ServerFrame extends JFrame implements ActionListener,ChangeListener,MouseListener
 {
 	static ServerFrame currentObject;
-	JPanel topPanel,ipPanel,studentMsg,parentPanel,audioPanel,studentPanel,textPanel;
+	JPanel topPanel,ipPanel,studentMsg,parentPanel,audioPanel,studentPanel,textPanel,detailsPanel;
 	/* all the other gui components are now added to this parentPanel */
 	static JTabbedPane tabbedPane;
 	JLabel ipLabel,sessionIdLabel,ipValueLabel,sessionIdValueLabel,appName;
 	public int width,height;
 	static JButton waitingButton;
 	static JComboBox studentNumberComboBox;
-
+	
 	String ipAddress=Server.serverIpAddress,sessionId=""+Server.serverSessionId;
 	static LinkedList<JButton>addButton=new LinkedList<JButton>();
 	static LinkedList<JButton>deleteButton=new LinkedList<JButton>();
@@ -29,8 +39,10 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	
 	ServerFrame()
 	{
+		super("Class Room Interaction");
 		WelcomeDialog welcomeDialog=new WelcomeDialog(this);
 		welcomeDialog.setVisible(true);
+		System.out.println("hello Kavleen Kalra");
 		currentObject=this;
 		/* initializeGraphicComponents();
 		 * 
@@ -38,23 +50,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		 * on the screen and ensuring that no NullPointerException is generated
 		 */
 		initializeGraphicComponents();
-		//studentNumberComboBox.setSelectedIndex(0);
-		///////////////////////////////////////
-		/*
-		studentPanel.setVisible(false);
-		studentPanel=new JPanel();
-		if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
-			studentPanel.setLayout(new GridLayout(5,1,10,10));
-		else
-			studentPanel.setLayout(new GridLayout(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()),1,10,10));
-		//studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
-		studentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		studentPanel.setBorder(new CompoundBorder(new LineBorder(Color.YELLOW, 2), new EmptyBorder(5, 5, 5, 5)));
-		for(int i=0;i<Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()) && i<Student.studentListAudio.size();i++)
-			studentPanel.add(createStudentPanel(i,Student.studentListAudio.get(i)));
-		*/
-		//audioPanel.add(studentPanel,BorderLayout.CENTER);
-		//audioPanel.setBorder(new CompoundBorder(new LineBorder(Color.red, 2), new EmptyBorder(5, 5, 5, 5)));
+
 		audioPanel.add(new JScrollPane(studentPanel),BorderLayout.CENTER);
 		audioPanel.setBackground(Color.white);
 		studentMsg.setVisible(false);
@@ -70,9 +66,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		
 		///////////////////////////////////////
 		this.setExtendedState(this.getExtendedState()|JFrame.MAXIMIZED_BOTH );
-		//setSize((int)(width),(int)(height)); //setting the size of frame
 		setLocation(0,0); // setting the location of the frame
-		//this.setResizable(false); // setting the resizable attribute - false so that the user cannot resize the frame
 		
 		ipPanel=new JPanel(); // ip panel will contain the ip address and the auto-generated sessionID.
 		
@@ -111,11 +105,6 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		bottomPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		/*
-		bottomPanel.add(listLabel,BorderLayout.CENTER);
-		bottomPanel.add(studentNumberComboBox,BorderLayout.EAST);
-		*/
-		
-		/*
 		 * now here you have to create  a button that will show the status of waiting list.
 		 */
 		
@@ -129,11 +118,36 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		textPanel=new JPanel();
 		textPanel.setLayout(new BorderLayout(10,10));
 		tabbedPane=new JTabbedPane();
-		//tabbedPane.addTab("Audio",new JScrollPane(audioPanel));
 		tabbedPane.addTab("Audio",audioPanel);
 		tabbedPane.addTab("Text",textPanel);
 		
-		topPanel.add(appName,BorderLayout.CENTER);
+		/***********************************************/
+		detailsPanel.setLayout(new BorderLayout(10,10));
+		JLabel departmentLabel=new JLabel(WelcomeDialog.departmentName);
+		departmentLabel.setFont(new Font("lucida console",Font.PLAIN,45));
+		
+		JPanel subDetailsPanel=new JPanel();
+		subDetailsPanel.setLayout(new GridLayout(2,2,5,5));
+		JLabel professorNameLabel=new JLabel("-"+WelcomeDialog.professorsName);
+		professorNameLabel.setFont(new Font("lucida console",Font.PLAIN,25));
+		JLabel subjectNameLabel=new JLabel(WelcomeDialog.subjectName);
+		subjectNameLabel.setFont(new Font("lucida console",Font.PLAIN,30));
+		subDetailsPanel.add(subjectNameLabel);
+		JLabel topicNameLabel=new JLabel(WelcomeDialog.topicName);
+		topicNameLabel.setFont(new Font("lucida console",Font.PLAIN,25));
+		subDetailsPanel.add(topicNameLabel);
+		subDetailsPanel.add(professorNameLabel);
+		subDetailsPanel.add(new JLabel(""));
+		
+		
+		/*
+		 * details panel to be updated here
+		 */
+		/***********************************************/
+		detailsPanel.add(subDetailsPanel,BorderLayout.CENTER);
+		detailsPanel.add(departmentLabel,BorderLayout.NORTH);
+		
+		topPanel.add(detailsPanel,BorderLayout.CENTER);
 		topPanel.add(ipPanel,BorderLayout.EAST);
 		
 		parentPanel.add(topPanel,BorderLayout.NORTH);
@@ -147,7 +161,8 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		tabbedPane.addChangeListener(this);
 	}
 
-	private void createBorderForMyPanels(){
+	private void createBorderForMyPanels()
+	{
 		audioPanel.setBorder(new CompoundBorder(new LineBorder(Color.YELLOW, 2), new EmptyBorder(0, 0, 0, 0)));
 		parentPanel.setBorder(new CompoundBorder(new LineBorder(Color.RED, 2), new EmptyBorder(0, 0, 0, 0)));
 		topPanel.setBorder(new CompoundBorder(new LineBorder(Color.RED, 2), new EmptyBorder(0, 0, 0, 0)));
@@ -160,9 +175,10 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		/* this method will initialize all the graphic components displayed
 		 * on the screen and ensuring that no NullPointerException is generated
 		 */
+		detailsPanel=new JPanel();
 		studentMsg=new JPanel();
 		parentPanel=new JPanel();
-		parentPanel.setLayout(new BorderLayout(10,10));
+		parentPanel.setLayout(new BorderLayout(0,0));
 
 		audioPanel=new JPanel();
 		studentPanel=new JPanel();
@@ -170,6 +186,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		
 		appName=new JLabel("App Name");
 		appName.setFont(new Font("lucida console",Font.PLAIN,70));
+		
 		for(int i=0;i<Student.studentListAudio.size();i++)
 		{
 			addButton.add(new JButton("\u2714"));
@@ -237,10 +254,6 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 			studentPanel.setLayout(new GridLayout(5,1,10,10));
 		else
 			studentPanel.setLayout(new GridLayout(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()),1,10,10));
-		//studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
-		
-		//audioPanel.add(studentPanel,BorderLayout.CENTER);
-		//audioPanel.add(new JScrollPane(studentPanel),BorderLayout.CENTER);
 		
 		audioPanel.setBackground(Color.white);
 		
@@ -257,69 +270,16 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 
 	public JPanel createStudentTextMsgPanel(int i,Student student)
 	{
-		/*
-		JPanel panel = new JPanel(new BorderLayout(10,10));
-		JPanel center1=new JPanel(new GridLayout(1,2,10,10));
-		JPanel east1=new JPanel();
-		east1.setLayout(new GridLayout(3,2,10,10));
-		
-		JPanel west2=new JPanel(new GridLayout(1,3,10,10));
-		JPanel east2=new JPanel();
-		east2.setLayout(new GridLayout(1,1,10,10));
-		ImagePanel imagePanel=new ImagePanel("/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg",width/4,100);
-		
-		imagePanel.setSize(100, 100);
-		west2.add(imagePanel);
-		
-		  
-	    west2.add(new JLabel(student.studentName));
-	    west2.add(new JLabel(student.doubtSubject));
-
-		west2.setBackground(Color.gray);
-		
-	      
-		JTextArea textMessageArea=new JTextArea(student.textMessage);
-		textMessageArea.setFont(new Font("lucida console",Font.PLAIN,20));
-		textMessageArea.setEditable(false);
-		east2.add(new JScrollPane(textMessageArea));
-		    
-		center1.add(west2);
-		center1.add(east2);
-		   
-		    
-		east1.add(new JLabel(""));
-		east1.add(new JLabel(""));
-		    
-	    east1.add(addButtonText.get(i));
-		east1.add(deleteButtonText.get(i));
-			
-		east1.add(new JLabel(""));
-		east1.add(new JLabel(""));
-			
-	    panel.add(center1,BorderLayout.CENTER);
-	    panel.add(east1,BorderLayout.EAST);
-		    
-	    return panel;
-	    */
 
 		int studentPanelHeight=(int)(this.getHeight()*0.11);
 		
 		JPanel finalPanel=new JPanel();
 		finalPanel.setBackground(Color.WHITE);
 		finalPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 7));
-		//finalPanel.setPreferredSize(new Dimension((int)(width),(int)(height*0.1)));
-		//finalPanel.setPreferredSize(new Dimension(audioPanel.getWidth(),studentPanelHeight));
-		//finalPanel.setBorder(new CompoundBorder(new LineBorder(Color.RED, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		ResizeImage imagea=new ResizeImage(student.pic); //--new
 		JPanel imagePanel=imagea.getResizeImage(); // --new
 		imagePanel.setPreferredSize(new Dimension((int)(width*0.1),studentPanelHeight));
-		//imagePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
-		
-		
-		//ImagePanel imagePanel=new ImagePanel(Student.studentListAudio.get(i).pic,(int)(width*0.1),studentPanelHeight);
-		//1111
-		//imagePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		JPanel namePanel=new JPanel();
 		namePanel.setPreferredSize(new Dimension((int)(width*0.15),studentPanelHeight));
@@ -327,7 +287,6 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		JLabel studentNameLabel=new JLabel(student.studentName);
 		studentNameLabel.setFont(new Font("lucida console",Font.PLAIN,20));
 		namePanel.add(studentNameLabel);
-		//namePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 
 		JPanel doubtPanel=new JPanel();
 		doubtPanel.setPreferredSize(new Dimension((int)(width*0.15),studentPanelHeight));
@@ -342,23 +301,21 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		doubtMsgPanel.setPreferredSize(new Dimension((int)(width*0.4),(int)(studentPanelHeight)));
 		doubtMsgPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 2));
 		JTextArea doubtSubjectMsgLabel=new JTextArea(student.textMessage);
+		doubtSubjectMsgLabel.setEditable(false);
 		doubtSubjectMsgLabel.setPreferredSize(new Dimension((int)(width*0.4*0.98),(int)(studentPanelHeight*0.9)));
 		doubtSubjectMsgLabel.setFont(new Font("lucida console",Font.PLAIN,20));
 		doubtMsgPanel.add(new JScrollPane(doubtSubjectMsgLabel));
-		//doubtMsgPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		
 		JPanel addButtonPanel=new JPanel();
 		addButtonPanel.setPreferredSize(new Dimension((int)(width*0.05),studentPanelHeight));
 		addButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, (int)(studentPanelHeight*0.3)));
 		addButtonPanel.add(addButtonText.get(i));
-		//addButtonPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		JPanel deleteButtonPanel=new JPanel();
 		deleteButtonPanel.setPreferredSize(new Dimension((int)(width*0.05),studentPanelHeight));
 		deleteButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, (int)(studentPanelHeight*0.3)));
 		deleteButtonPanel.add(deleteButtonText.get(i));
-		//deleteButtonPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		finalPanel.add(imagePanel);
 		finalPanel.add(namePanel);
@@ -371,67 +328,18 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	}
 	public JPanel createStudentPanel(int i,Student student)
 	{
-		/*
-	    JPanel studentPanel=new JPanel();
-		studentPanel.setLayout(new BorderLayout(10,10));
-		studentPanel.setBorder(BorderFactory.createTitledBorder(""));
-		
-		JPanel westStudentPanel=new JPanel();
-		westStudentPanel.setLayout(new GridLayout(1,2,10,10));
-		
-		JPanel eastStudentPanel=new JPanel();
-		eastStudentPanel.setLayout(new GridLayout(3,2,10,10));
 
-		JPanel westsub1=new JPanel(new GridLayout(1,2,10,10));
-		
-		JPanel westsub2=new JPanel(new GridLayout(1,1,10,10));
-		
-         
-		JPanel img=new JPanel(new GridLayout(1,2,10,10));
-		ImagePanel imagePanel=new ImagePanel(Student.studentListAudio.get(i).pic,width/4,100);
-		//imagePanel.setSize(100, 100);
-		//imagePanel.setBorder(new EmptyBorder(0, 10, 0,20) );
-		img.add(imagePanel);
-		img.add(new JLabel("  "));
-		westsub1.add(img);
-		westsub1.add(new JLabel(appendString(student.studentName)));
-	    westsub2.add(new JLabel(student.doubtSubject));
-		
-		westStudentPanel.add(westsub1);
-		westStudentPanel.add(westsub2);
-		
-		
-		eastStudentPanel.add(new JLabel(""));
-		eastStudentPanel.add(new JLabel(""));
-		
-		eastStudentPanel.add(addButton.get(i));
-		
-		eastStudentPanel.add(deleteButton.get(i));
-		eastStudentPanel.add(new JLabel(""));
-		eastStudentPanel.add(new JLabel(""));
-		
-		studentPanel.add(westStudentPanel,BorderLayout.CENTER);
-		studentPanel.add(eastStudentPanel,BorderLayout.EAST);
-		
-		return studentPanel;
-		*/
-		
 		int studentPanelHeight=(int)(this.getHeight()*0.11);
 		
 		JPanel finalPanel=new JPanel();
 		finalPanel.setBackground(Color.WHITE);
 		finalPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 7));
-		//finalPanel.setPreferredSize(new Dimension((int)(width),(int)(height*0.1)));
-		//finalPanel.setPreferredSize(new Dimension(audioPanel.getWidth(),studentPanelHeight));
-		//finalPanel.setBorder(new CompoundBorder(new LineBorder(Color.RED, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		
 		ResizeImage imagea=new ResizeImage(student.pic); //--new
 		JPanel imagePanel=imagea.getResizeImage(); // --new
 		
-		//ImagePanel imagePanel=new ImagePanel(Student.studentListAudio.get(i).pic,(int)(width*0.1),studentPanelHeight);
 		imagePanel.setPreferredSize(new Dimension((int)(width*0.1),studentPanelHeight));
-		//imagePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		JPanel namePanel=new JPanel();
 		namePanel.setPreferredSize(new Dimension((int)(width*0.25),studentPanelHeight));
@@ -439,7 +347,6 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		JLabel studentNameLabel=new JLabel(student.studentName);
 		studentNameLabel.setFont(new Font("lucida console",Font.PLAIN,20));
 		namePanel.add(studentNameLabel);
-		//namePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		JPanel doubtPanel=new JPanel();
 		doubtPanel.setPreferredSize(new Dimension((int)(width*0.45),studentPanelHeight));
@@ -447,19 +354,16 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		JLabel doubtSubjectLabel=new JLabel(student.doubtSubject);
 		doubtSubjectLabel.setFont(new Font("lucida console",Font.PLAIN,20));
 		doubtPanel.add(doubtSubjectLabel);
-		//doubtPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		JPanel addButtonPanel=new JPanel();
 		addButtonPanel.setPreferredSize(new Dimension((int)(width*0.05),studentPanelHeight));
 		addButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, (int)(studentPanelHeight*0.3)));
 		addButtonPanel.add(addButton.get(i));
-		//addButtonPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		JPanel deleteButtonPanel=new JPanel();
 		deleteButtonPanel.setPreferredSize(new Dimension((int)(width*0.05),studentPanelHeight));
 		deleteButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, (int)(studentPanelHeight*0.3)));
 		deleteButtonPanel.add(deleteButton.get(i));
-		//deleteButtonPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		finalPanel.add(imagePanel);
 		finalPanel.add(namePanel);
@@ -479,7 +383,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	
 	public Insets getInsets()
 	{
-		return new Insets(40,20,20,20);
+		return new Insets(10,20,20,20);
 	}
 	
 	public void actionPerformed(ActionEvent ae)
@@ -506,26 +410,19 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 			else 
 				waitingButton.setText("Waiting : 0");
 			
-			//studentPanel.setVisible(false);
 			audioPanel.removeAll();
 			studentPanel.removeAll();
 			studentPanel=new JPanel();
-			//studentPanel.setPreferredSize(new Dimension(audioPanel.getWidth(),audioPanel.getHeight()));
-			//studentPanel.setBorder(new CompoundBorder(new LineBorder(Color.MAGENTA, 2), new EmptyBorder(0, 0, 0, 0)));
 			studentPanel.setBackground(Color.WHITE);
 			
 			if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
 				studentPanel.setLayout(new GridLayout(5,1,10,10));
-			else
-				//studentPanel.setLayout(new GridLayout(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()),1,10,10));
-			
-			studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
+			else			
+				studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
 			for(int i=0;i<Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()) && i<Student.studentListAudio.size();i++)
 			{
 				studentPanel.add(createStudentPanel(i,Student.studentListAudio.get(i)));
 			}
-			//studentPanel.setVisible(true);
-			//audioPanel.add(studentPanel,BorderLayout.CENTER);
 			audioPanel.add(new JScrollPane(studentPanel),BorderLayout.CENTER);
 			
 			audioPanel.setBackground(Color.WHITE);
@@ -533,15 +430,12 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 			////////////////////////////////////////////////////////////////
 			textPanel.removeAll();
 			studentMsg.removeAll();
-			//studentMsg.setVisible(false);
 			studentMsg=new JPanel();
 			studentMsg.setBackground(Color.WHITE);
 			if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
 				studentMsg.setLayout(new GridLayout(5,1,10,10));
 			else
-				//studentPanel.setLayout(new GridLayout(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()),1,10,10));
-			
-			studentMsg.setLayout(new BoxLayout(studentMsg, BoxLayout.Y_AXIS));
+				studentMsg.setLayout(new BoxLayout(studentMsg, BoxLayout.Y_AXIS));
 		
 			for(int i=0;i<Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()) && i<Student.studentListText.size();i++)
 			{
@@ -559,23 +453,19 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 				new GeneralDialogBox(this, Student.studentListAudio.get(i)).setVisible(true);
 				Student.studentListAudio.remove(i);
 				
-				//studentPanel.setVisible(false);
 				audioPanel.removeAll();
 				studentPanel.removeAll();
 				studentPanel=new JPanel();
 				if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
 					studentPanel.setLayout(new GridLayout(5,1,10,10));
 				else
-					//studentPanel.setLayout(new GridLayout(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()),1,10,10));
-				studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
-				//studentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+					studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
 				
 				studentPanel.setBackground(Color.white);
 			
 				for(int j=0;j<Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()) && j<Student.studentListAudio.size();j++)
 					studentPanel.add(createStudentPanel(j,Student.studentListAudio.get(j)));
 				
-				//audioPanel.add(studentPanel,BorderLayout.CENTER);
 				audioPanel.add(new JScrollPane(studentPanel),BorderLayout.CENTER);
 				
 				audioPanel.setBackground(Color.WHITE);
@@ -592,16 +482,13 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 			{
 				Student.studentListAudio.remove(i);
 				
-				//studentPanel.setVisible(false);
 				audioPanel.removeAll();
 				studentPanel.removeAll();
 				studentPanel=new JPanel();
 				if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
 					studentPanel.setLayout(new GridLayout(5,1,10,10));
 				else
-					//studentPanel.setLayout(new GridLayout(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()),1,10,10));
-				studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
-				//studentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+					studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
 				
 				studentPanel.setBackground(Color.white);
 			
@@ -630,23 +517,19 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 				new GeneralDialogBox(this, Student.studentListText.get(i)).setVisible(true);
 				Student.studentListText.remove(i);
 				
-				//studentPanel.setVisible(false);
 				textPanel.removeAll();
 				studentMsg.removeAll();
 				studentMsg=new JPanel();
 				if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
 					studentMsg.setLayout(new GridLayout(5,1,10,10));
 				else
-					//studentPanel.setLayout(new GridLayout(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()),1,10,10));
-				studentMsg.setLayout(new BoxLayout(studentMsg, BoxLayout.Y_AXIS));
-				//studentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+					studentMsg.setLayout(new BoxLayout(studentMsg, BoxLayout.Y_AXIS));
 				
 				studentMsg.setBackground(Color.white);
 			
 				for(int j=0;j<Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()) && j<Student.studentListText.size();j++)
 					studentMsg.add(createStudentTextMsgPanel(j,Student.studentListText.get(j)));
 				
-				//audioPanel.add(studentPanel,BorderLayout.CENTER);
 				textPanel.add(new JScrollPane(studentMsg),BorderLayout.CENTER);
 				
 				textPanel.setBackground(Color.WHITE);
@@ -664,23 +547,19 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 			{
 				Student.studentListText.remove(i);
 				
-				//studentPanel.setVisible(false);
 				textPanel.removeAll();
 				studentMsg.removeAll();
 				studentMsg=new JPanel();
 				if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
 					studentMsg.setLayout(new GridLayout(5,1,10,10));
 				else
-					//studentPanel.setLayout(new GridLayout(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()),1,10,10));
-				studentMsg.setLayout(new BoxLayout(studentMsg, BoxLayout.Y_AXIS));
-				//studentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+					studentMsg.setLayout(new BoxLayout(studentMsg, BoxLayout.Y_AXIS));
 				
 				studentMsg.setBackground(Color.white);
 			
 				for(int j=0;j<Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()) && j<Student.studentListText.size();j++)
 					studentMsg.add(createStudentTextMsgPanel(j,Student.studentListText.get(j)));
 				
-				//audioPanel.add(studentPanel,BorderLayout.CENTER);
 				textPanel.add(new JScrollPane(studentMsg),BorderLayout.CENTER);
 				
 				textPanel.setBackground(Color.WHITE);
@@ -744,6 +623,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
 		((JPanel)(e.getSource())).setBorder(new CompoundBorder(new LineBorder(Color.RED, 2), new EmptyBorder(0, 0, 0, 0)));
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	
 	}
 
@@ -751,7 +631,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		((JPanel)(e.getSource())).setBorder(new CompoundBorder(new LineBorder(Color.WHITE, 2), new EmptyBorder(0, 0, 0, 0)));
-		
+		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	@Override
@@ -775,16 +655,13 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
 			studentPanel.setLayout(new GridLayout(5,1,10,10));
 		else
-			//studentPanel.setLayout(new GridLayout(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()),1,10,10));
-		studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
-		//studentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
 		
 		studentPanel.setBackground(Color.white);
 	
 		for(int j=0;j<Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()) && j<Student.studentListAudio.size();j++)
 			studentPanel.add(createStudentPanel(j,Student.studentListAudio.get(j)));
 		
-		//audioPanel.add(studentPanel,BorderLayout.CENTER);
 		audioPanel.add(new JScrollPane(studentPanel),BorderLayout.CENTER);
 		
 		audioPanel.setBackground(Color.WHITE);
@@ -805,16 +682,13 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
 			studentMsg.setLayout(new GridLayout(5,1,10,10));
 		else
-			//studentPanel.setLayout(new GridLayout(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()),1,10,10));
-		studentMsg.setLayout(new BoxLayout(studentMsg, BoxLayout.Y_AXIS));
-		//studentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			studentMsg.setLayout(new BoxLayout(studentMsg, BoxLayout.Y_AXIS));
 		
 		studentMsg.setBackground(Color.white);
 	
 		for(int j=0;j<Integer.parseInt(studentNumberComboBox.getSelectedItem().toString()) && j<Student.studentListText.size();j++)
 			studentMsg.add(createStudentTextMsgPanel(j,Student.studentListText.get(j)));
 		
-		//audioPanel.add(studentPanel,BorderLayout.CENTER);
 		textPanel.add(new JScrollPane(studentMsg),BorderLayout.CENTER);
 		
 		textPanel.setBackground(Color.WHITE);

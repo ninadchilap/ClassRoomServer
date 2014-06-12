@@ -57,10 +57,10 @@ public class Student
 			System.out.println("Reaced in Student Object");
 			JButton tickButton=new JButton("\u2714");
 			JButton crossButton=new JButton("X");
-
+			
 			ServerFrame.methodToAddActionListener(tickButton);
 			ServerFrame.methodToAddActionListener(crossButton);
-
+			
 			ServerFrame.addButtonText.add(tickButton);
 			ServerFrame.deleteButtonText.add(crossButton);
 			studentListText.add(this);

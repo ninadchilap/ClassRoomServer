@@ -39,7 +39,6 @@ public class WaitingDialogForText extends Dialog implements KeyListener,Document
 		//this.setVisible(true);
 		this.setTitle("Search Dialog for Text");
 		
-		
 		initializeGraphicComponents();
 		parentPanel.setLayout(new BorderLayout(10,10));
 		scrollPanel.add(new JScrollPane(searchPanel),BorderLayout.CENTER);

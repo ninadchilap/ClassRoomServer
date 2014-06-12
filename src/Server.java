@@ -1,23 +1,17 @@
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
-
 import javax.swing.JFrame;
-
-import org.omg.PortableInterceptor.ServerIdHelper;
 
 class Server
 {
@@ -41,6 +35,8 @@ class Server
         InetAddress i = (InetAddress) ee.nextElement();
         i = (InetAddress) ee.nextElement();
         serverIpAddress=""+i;
+        char ip[]=serverIpAddress.toCharArray();
+        serverIpAddress=new String(ip,1,serverIpAddress.length()-1);
         serverSessionId=(int)(Math.random()*10000);
        
         System.out.println(serverIpAddress);
@@ -59,23 +55,25 @@ class Server
     	
     	String filename= "Images/print.txt";
         FileWriter fw;
-    try {
-    fw = new FileWriter(filename,false);
-    fw.write(String.format("%-20s%-20s%-20s%-20s%-10s", "MAC_ID", "USERNAME", "ROLL NO.","DOUBT TOPIC","DOUBT TEXT\n\n\n"));
-      fw.close();
-    } catch (IOException e1) {
-    // TODO Auto-generated catch block
-    e1.printStackTrace();
-    } //the true will append the new data
-       
-     
+	    try 
+	    {
+		    fw = new FileWriter(filename,false);
+		    fw.write(String.format("%-20s%-20s%-20s%-20s%-10s", "MAC_ID", "USERNAME", "ROLL NO.","DOUBT TOPIC","DOUBT TEXT\n\n\n"));
+		    fw.close();
+	    } 
+	    catch (IOException e1) {
+	    	// TODO Auto-generated catch block
+	    	e1.printStackTrace();
+	    } //the true will append the new data
+	       
+	     
 
     	new Student();
 		ServerFrame sf=new ServerFrame();
 		sf.setVisible(true);
 		sf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	/********************************************************************/
-    
+		/*
 		new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Rakshit","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Kavleen","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
@@ -114,7 +112,7 @@ class Server
     	new Student("xyz sharma","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
     	new Student("pqr sharma","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
     	new Student("Lavish","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
-	
+		*/
 		new Server();
 		
 		sf.ipLabel.setText("IP Address : "+serverIpAddress);
@@ -138,7 +136,9 @@ class Server
                 System.out.println("a client connected");
                 new LoginThread(serverObj);
             }
-        } catch (IOException e) {
+        } 
+        catch (IOException e) 
+        {
             e.printStackTrace();
         }
     }
@@ -175,7 +175,6 @@ class LoginThread implements Runnable
     	{
     		dis.readFully(buf,0,byteSent);
     		fileOut.write(buf,0,byteSent);
-    		
     	}
     	fileOut.close();
     }
@@ -203,34 +202,31 @@ class LoginThread implements Runnable
                		clientSessionID=dis.readUTF();
                		if(clientSessionID==null)
                			break;
-	               	 if(server.serverSessionId==Integer.parseInt(clientSessionID))
-	                 {
-	                     dos.writeUTF("1");
-	                  
-	                     client.close();
-	                     count=1;
-	                     break;
-	                 }
-	               	 else
-	               	 {
-	               		 dos.writeUTF("0");
-	               	 }
+	               	if(server.serverSessionId==Integer.parseInt(clientSessionID))
+	                {
+	                    dos.writeUTF("1");
+	                    client.close();
+	                    count=1;
+	                    break;
+	                }
+	               	else
+	               	{
+	               		dos.writeUTF("0");
+	               	}
                	}
-            	else{
-                    //System.out.println("Audio doubt entered");
-            		
-            		
-            		if("remove".equals(test))
+            	else
+            	{
+                    if("remove".equals(test))
             		{
-            		macid=dis.readUTF();
-            		doubtSubject=dis.readUTF();
-            		doubtText=dis.readUTF();
-            		new Student("Saket","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-                	new Student("","",macid,"",doubtSubject,doubtText,"remove");
-            		dos.writeUTF("received");
-            		   client.close();
-            		           count=1;
-            		           break;
+	            		macid=dis.readUTF();
+	            		doubtSubject=dis.readUTF();
+	            		doubtText=dis.readUTF();
+	            		new Student("Saket","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+	                	new Student("","",macid,"",doubtSubject,doubtText,"remove");
+	            		dos.writeUTF("received");
+	            		client.close();
+	            		count=1;
+	            		break;
             		}
             		else
             		{
@@ -264,18 +260,6 @@ class LoginThread implements Runnable
     				    break;
             		}
             		               
-            		
-            		
-            		
-            		
-            		
-            		
-            		
-            		
-            		
-            		
-            		
-				    
             	}
             }
             catch(Exception e)

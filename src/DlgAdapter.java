@@ -13,5 +13,9 @@ public class DlgAdapter extends WindowAdapter
 	public void windowClosing(WindowEvent we)
 	{
 		d.dispose();
+		if(d instanceof WelcomeDialog)
+		{
+			System.exit(1);
+		}
 	}
 }
