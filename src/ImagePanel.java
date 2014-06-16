@@ -16,11 +16,9 @@ public class ImagePanel extends JPanel
     
     	   Dimension size = new Dimension(imageWidth, imageHeight);
     	   setPreferredSize(size);
-    	   //setMinimumSize(size);
-    	   //setMaximumSize(size);
+    	   
     	   setSize(size);
-    	   //setLayout(null);
-    	   Image scaledImage = image.getScaledInstance(imageWidth,imageHeight,Image.SCALE_SMOOTH);
+    	   //Image scaledImage = image.getScaledInstance(imageWidth,imageHeight,Image.SCALE_SMOOTH);
        } 
        catch (IOException ex) {
     	   System.out.println("hello lavish kothari");

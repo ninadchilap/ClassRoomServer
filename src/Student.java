@@ -25,7 +25,7 @@ public class Student
 	/* This Linked List will have the list of all the students */
 	static LinkedList<Student> studentList=new LinkedList<Student>();
 
-	Student()
+	Student() // default constructor
 	{
 		
 	}
@@ -82,7 +82,12 @@ public class Student
 		{
 			studentList.add(this);
 		}
-		//new RefreshingThread(sf);
+		
+		/* 
+		 * as soon as a new student is added, it is necessary for the server to keep the track of the student
+		 * and for doing the same, we run the refreshing thread to update the view of Professor
+		 * so that professor can have an updated view each time as soon as a student visits.
+		 */
 		ServerFrame.refreshFrame();
 	}
 
