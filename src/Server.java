@@ -135,7 +135,7 @@ public class Server
 		 * now starting the audio and the text thread
 		 */
 		new TextThread(serverObj);
-		new AudioThread(serverObj);
+		new AudioThread();
 		  
     }
 }
