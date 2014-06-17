@@ -9,25 +9,8 @@ public class print_in_file
 		{
 			String filename= "Images/print.txt";
 			FileWriter fw = new FileWriter(filename,true); //the true will append the new data
-		   
+			
 			doubtText.replace('\n', ' ');
-			/*
-			String ss=doubtText;
-			StringBuilder str = new StringBuilder(doubtText);
-			int i=str.length()-str.length()/2;
-			int flag=0;
-			while(i<str.length() && flag==0)
-			{
-				  if(doubtText.charAt(i)!=' ')
-					  i++;  
-				  else
-					  flag=1;
-			}
-			
-			if(flag==1)
-				str.insert(i, "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
-			*/  
-			
 			fw.write(String.format("%-20s%s",username,doubtText));
 			fw.close();
 		}

@@ -13,6 +13,7 @@ import java.awt.event.KeyListener;
 import java.util.LinkedList;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,7 +24,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class WaitingDialogForAudio extends Dialog implements KeyListener,DocumentListener,ActionListener
+public class WaitingDialogForAudio extends JFrame implements KeyListener,DocumentListener,ActionListener
 {
 	LinkedList<JButton> tempAddButtonList,tempDeleteButtonList;
 	LinkedList<Student>tempStudentLinkedList;
@@ -32,12 +33,14 @@ public class WaitingDialogForAudio extends Dialog implements KeyListener,Documen
 	ServerFrame sf;
 	WaitingDialogForAudio(ServerFrame sf)
 	{
-		super(sf,true);
+		//super(sf,true);
 		this.sf=sf;
-		this.setSize(500,500);
-		this.setLocation(100,100);
+		//this.setSize(500,500);
+		//this.setLocation(100,100);
 		//this.setVisible(true);
-		this.setTitle("Search Dialog for Text");
+		//this.setResizable(false);
+		this.setExtendedState(this.getExtendedState()|JFrame.MAXIMIZED_BOTH );
+		this.setTitle("Search Dialog for Audio");
 		
 		
 		initializeGraphicComponents();
@@ -110,26 +113,32 @@ public class WaitingDialogForAudio extends Dialog implements KeyListener,Documen
 		tempStudentLinkedList = new LinkedList();
 		tempAddButtonList=new LinkedList();
 		tempDeleteButtonList=new LinkedList();
-		for(int i=0;i<Student.studentListAudio.size();i++)
+		
+		if(searchField.getText().equals(""))
 		{
-			Student currentStudent=Student.studentListAudio.get(i);
-			if(currentStudent.studentName.indexOf(searchField.getText())!=-1 || currentStudent.doubtSubject.indexOf(searchField.getText())!=-1)
-			{
-				//System.out.println(currentStudent.studentName+"  -->  "+currentStudent.studentName.indexOf(searchField.getText()));
-				
-				JButton tickButton=new JButton("\u2714");
-				JButton crossButton=new JButton("X");
-				tickButton.addActionListener(this);
-				crossButton.addActionListener(this);
-				//ServerFrame.methodToAddActionListener(tickButton);
-				//ServerFrame.methodToAddActionListener(crossButton);
-				
-				tempAddButtonList.add(tickButton);
-				tempDeleteButtonList.add(crossButton);
-				
-				tempStudentLinkedList.add(currentStudent);
-			}
+			
 		}
+		else
+			for(int i=0;i<Student.studentListAudio.size();i++)
+			{
+				Student currentStudent=Student.studentListAudio.get(i);
+				if(currentStudent.studentName.indexOf(searchField.getText())!=-1 || currentStudent.doubtSubject.indexOf(searchField.getText())!=-1)
+				{
+					//System.out.println(currentStudent.studentName+"  -->  "+currentStudent.studentName.indexOf(searchField.getText()));
+					
+					JButton tickButton=new JButton("\u2714");
+					JButton crossButton=new JButton("X");
+					tickButton.addActionListener(this);
+					crossButton.addActionListener(this);
+					//ServerFrame.methodToAddActionListener(tickButton);
+					//ServerFrame.methodToAddActionListener(crossButton);
+					
+					tempAddButtonList.add(tickButton);
+					tempDeleteButtonList.add(crossButton);
+					
+					tempStudentLinkedList.add(currentStudent);
+				}
+			}
 		addStudentInSearchPanel(tempStudentLinkedList);
 		//System.out.println("size of tempStudentLinkedList = "+tempStudentLinkedList.size());
 		
@@ -155,7 +164,12 @@ public class WaitingDialogForAudio extends Dialog implements KeyListener,Documen
 		
 		searchPanel.setBackground(Color.WHITE);
 		searchPanel.setBorder(new CompoundBorder(new LineBorder(Color.YELLOW, 2), new EmptyBorder(0, 0, 0, 0)));
-		searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+		//searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+		
+		if(tempStudentLinkedList.size()<10)
+			searchPanel.setLayout(new GridLayout(9,1,1,1));
+		else
+			searchPanel.setLayout(new GridLayout(tempStudentLinkedList.size(),1,1,1));
 		
 		for(int i=0;i<tempStudentLinkedList.size();i++)
 		{

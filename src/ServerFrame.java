@@ -30,7 +30,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	JLabel ipLabel,sessionIdLabel;
 	public int width,height;
 	static JButton waitingButton;
-	
+	static String ipAddressString,sessionIdString;
 	/*
 	 * this comboBox is provided to the professor so that professor can select any number of students 
 	 * that will be visible in the audio or text panel.
@@ -59,8 +59,6 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		WelcomeDialog welcomeDialog=new WelcomeDialog(this);
 		welcomeDialog.setVisible(true);
 		/*******************************************/
-		
-		
 		
 		/****************************************/
 
@@ -199,6 +197,9 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		
 		topPanel.add(detailsPanel,BorderLayout.CENTER);
 		topPanel.add(ipPanel,BorderLayout.EAST);
+		
+		//ipPanel.setBorder(new CompoundBorder(new LineBorder(Color.YELLOW, 2), new EmptyBorder(0, 0, 0, 0)));
+		ipPanel.addMouseListener(this);
 		
 		parentPanel.add(topPanel,BorderLayout.NORTH);
 		parentPanel.add(tabbedPane,BorderLayout.CENTER);
@@ -681,12 +682,25 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		// TODO Auto-generated method stub
 		((JPanel)(e.getSource())).setBorder(new CompoundBorder(new LineBorder(Color.RED, 2), new EmptyBorder(0, 0, 0, 0)));
 		//setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		if(e.getSource()==ipPanel)
+		{
+			setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			
+			return;
+		}
+		
 	
 	}
-
+    
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+		((JPanel)(e.getSource())).setBorder(new EmptyBorder(0, 0, 0, 0));
+		//setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		if(e.getSource()==ipPanel)
+		{
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			return;
+		}// TODO Auto-generated method stub
 		((JPanel)(e.getSource())).setBorder(new CompoundBorder(new LineBorder(Color.WHITE, 2), new EmptyBorder(0, 0, 0, 0)));
 		//setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
@@ -700,6 +714,8 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
+		if(e.getSource()==ipPanel)
+			new FocusedIpPanel(this).setVisible(true);
 		
 	}
 	

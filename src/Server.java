@@ -50,12 +50,14 @@ public class Server
         char ip[]=serverIpAddress.toCharArray();
         if(ip[0]=='/')
         	serverIpAddress=new String(ip,1,serverIpAddress.length()-1);
+        
         /*
          * the following while loop ensures that the server session id will be 
          * of 4 digits
          * 
          * now the server session id will be consisting exactly 4 digits
          */
+        
         do
         {
         	serverSessionId=(int)(Math.random()*10000);
@@ -69,8 +71,6 @@ public class Server
     public static void main(String args[])
     {
     	/********************************************************************/
-		 
-
     	new Student();
 		ServerFrame sf=new ServerFrame();
 		sf.setVisible(true);
@@ -84,8 +84,7 @@ public class Server
 		 */
     	
 		new Student("Lavish Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-    	/*
-		new Student("Rakshit","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+    	new Student("Rakshit","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Kavleen","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Nonu","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Shanky","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
@@ -109,11 +108,9 @@ public class Server
     	new Student("Kush Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Love Kothari","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Naveen","147","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
-		*/
 		
     	new Student("Lavish Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
-    	/*
-    	new Student("Rakshit Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+     	new Student("Rakshit Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
     	new Student("Kavleen Kalra","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
     	new Student("Nonujeet","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
     	new Student("Love Kothari","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
@@ -124,9 +121,15 @@ public class Server
     	new Student("xyz sharma","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
     	new Student("pqr sharma","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
     	new Student("Lavish","159","123.123.123","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
-		*/
-    	
+		
     	new Server();
+		
+    	sf.ipLabel.setText("IP Address : "+serverIpAddress);
+		sf.sessionIdLabel.setText("Session ID : "+serverSessionId);
+		
+		ServerFrame.ipAddressString="IP Address : "+serverIpAddress;
+		ServerFrame.sessionIdString="Session ID : "+serverSessionId;
+		
 		
 		sf.ipLabel.setText("IP Address : "+serverIpAddress);
 		sf.sessionIdLabel.setText("Session ID : "+serverSessionId);
