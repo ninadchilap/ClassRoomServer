@@ -7,21 +7,20 @@ import java.io.IOException;
 import java.net.Socket;
 
 
-class LoginThreadText implements Runnable
+class LoginThreadAudio implements Runnable
 {
 	DataInputStream dis;
 	DataOutputStream dos;
 	String username,roll,macid,doubtSubject,doubtText,ip;
-    File myFile = new File("s.txt");
     String clientIpAddress,clientSessionID;
     Socket client;
     Server server;
     BufferedImage image;
-    LoginThreadText(Server server)
+    LoginThreadAudio(Server server)
     {
     	System.out.println("Thread started");
         this.server=server;
-        client=server.clientText;
+        client=server.clientAudio;
         Thread thread=new Thread(this);
         thread.start();
     }
@@ -42,31 +41,16 @@ class LoginThreadText implements Runnable
     @Override
     public void run()
     {
-    	System.out.println("thread is running");
+    	System.out.println("thread is running^6666666666666666666666666666666666");
         {
             try
             {
             	dis=new DataInputStream(client.getInputStream());
                	dos=new DataOutputStream(client.getOutputStream());
               
-               	String test;
-               	test=dis.readUTF();
-               	if("USER".equals(test))
+               	String test="else";
+               //	test=dis.readUTF();
                	{
-               		dos.writeUTF("1");
-               		clientSessionID=dis.readUTF();
-               		if(server.serverSessionId==Integer.parseInt(clientSessionID))
-	                {
-	                    dos.writeUTF("1");
-	                    client.close();
-	                }
-	               	else
-	               	{
-	               		dos.writeUTF("0");
-	               	}
-               	}
-            	else
-            	{
             	    if("remove".equals(test))
             		{
                     	System.out.println("somethin is worng!!!!!!");
@@ -97,25 +81,46 @@ class LoginThreadText implements Runnable
     				    roll=dis.readUTF();
     				    macid=dis.readUTF();
     				    doubtSubject=dis.readUTF();
-    				    doubtText=dis.readUTF();
-    				
+    				    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaasssssssssssssssssssssssssssssss");
     				    System.out.println("username="+username);
     				    System.out.println("roll="+roll);
     				    System.out.println("macid="+macid);
     				    System.out.println("doubtSubject="+doubtSubject);
-    				    System.out.println("doubtText="+doubtText);
+    				    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaasssssssssssssssssssssssssssssss11111111");
+    				   // System.out.println("doubtText="+doubtText);
     				    
     				    File outFile=new File("/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/"+macid+".jpg");
     				    
-    				    receiveFile(outFile);
+    				  //  receiveFile(outFile);
     				
-    				    System.out.println(outFile.getAbsolutePath());
-    				    new print_in_file(macid,username,roll,doubtSubject,doubtText);
+    				    //System.out.println(outFile.getAbsolutePath());
     				    ip=client.getInetAddress()+"";
-    				    new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,doubtText,"text");
-    				
-    				    dos.writeUTF("received");
-    				
+    				    
+    				    char ip1[]=ip.toCharArray();
+    			        if(ip1[0]=='/')
+    			        	ip=new String(ip1,1,ip.length()-1);
+    				    
+    				    
+    				    
+    				    //new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,"","audio");
+    				    new Student(username,roll,macid,ip,"/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg",doubtSubject,"","audio");
+
+    				    new NotifyAllClients(ip,"single");
+    				    //dos.writeUTF("received");
+    				    String disconnectAudioDoubt=dis.readUTF();
+    				    if(disconnectAudioDoubt.equals("kick_me_out"))
+    				    {
+    				    	String currentMacId=dis.readUTF();
+    				    	for(int i=0;i<Student.studentListAudio.size();i++)
+    						{
+    							
+    							if(Student.studentListAudio.get(i).macAddress.equals(currentMacId) )
+    							{
+    								Student.studentListAudio.remove(i);
+    								ServerFrame.refreshFrame();
+    							}
+    						}
+    				    }
     				    client.close();
     				}
             		               

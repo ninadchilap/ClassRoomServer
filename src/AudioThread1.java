@@ -1,10 +1,10 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public class TextThread implements Runnable
+public class AudioThread1 implements Runnable
 {
 	Server server;
-	TextThread(Server server)
+	AudioThread1(Server server)
 	{
 		this.server=server;
 		Thread t=new Thread(this);
@@ -15,11 +15,11 @@ public class TextThread implements Runnable
 		// TODO Auto-generated method stub
 		try
         {
-			 Server.serverSocketText=new ServerSocket(Server.serverPortText);
+			 Server.serverSocketAudio=new ServerSocket(5566);
 			 while(true)
 			 {
-				 Server.clientText=Server.serverSocketText.accept();
-				 new LoginThreadText(server);
+				 Server.clientAudio=Server.serverSocketAudio.accept();
+				 new LoginThreadAudio(server);
 				 
 			 }
         } 

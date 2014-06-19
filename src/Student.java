@@ -14,7 +14,7 @@ import javax.swing.JButton;
 public class Student
 {
 	// this class stores the student information
-	String studentName,rollno,macAddress,pic,doubtSubject,textMessage,doubtType;
+	String studentName,rollno,macAddress,pic,doubtSubject,textMessage,doubtType,ip;
 	
 	/* This is the LinkedList that will store the list of students who are having a Text doubt*/
 	static LinkedList<Student> studentListText=new LinkedList<Student>(); 
@@ -29,8 +29,9 @@ public class Student
 	{
 		
 	}
-	Student(String studentName,String rollno,String macAddress,String pic,String doubtSubject,String textMessage,String doubtType)
+	Student(String studentName,String rollno,String macAddress,String ip,String pic,String doubtSubject,String textMessage,String doubtType)
 	{
+		this.ip=ip;
 		this.textMessage=textMessage;
 		this.rollno=rollno;
 		this.doubtType=doubtType;

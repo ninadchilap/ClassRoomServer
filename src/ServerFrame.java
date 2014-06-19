@@ -490,6 +490,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 			studentMsg.removeAll();
 			studentMsg=new JPanel();
 			studentMsg.setBackground(Color.WHITE);
+			
 			if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5 || Student.studentListText.size()<=5)
 				studentMsg.setLayout(new GridLayout(5,1,10,10));
 			else
@@ -508,8 +509,22 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		{
 			if(ae.getSource()==addButton.get(i))
 			{
+				/*
+				 * Sending the client the permission to speak - server says - "its your turn"
+				 */
+				new NotificationToSpeak((Student.studentListAudio.get(i)).ip); // new
+				
 				new GeneralDialogBox(this, Student.studentListAudio.get(i)).setVisible(true);
+				//new NotifyAllClients(Student.studentListAudio.get(i).ip,"single_to_kick");
+				
+				
 				Student.studentListAudio.remove(i);
+				new NotifyAllClients("","multi");
+				
+				/*
+				 * now broadcast the respective queue number to each client
+				 */
+				//new NotifyAllClients(); // new
 				
 				audioPanel.removeAll();
 				studentPanel.removeAll();
@@ -538,7 +553,11 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 			}
 			if(ae.getSource()==deleteButton.get(i))
 			{
+				
+				new NotifyAllClients(Student.studentListAudio.get(i).ip,"single_to_kick");
+				
 				Student.studentListAudio.remove(i);
+				new NotifyAllClients("","multi");
 				
 				audioPanel.removeAll();
 				studentPanel.removeAll();
