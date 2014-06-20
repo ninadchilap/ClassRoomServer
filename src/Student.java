@@ -55,7 +55,6 @@ public class Student
 		}
 		else if(doubtType.equals("text"))// if the doubtType is audio then add the student to studentListText
 		{
-			System.out.println("Reaced in Student Object");
 			JButton tickButton=new JButton("\u2714");
 			JButton crossButton=new JButton("X");
 			

@@ -50,27 +50,21 @@ public class AudioThread implements Runnable {
 
 			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 			ByteArrayInputStream baiss = new ByteArrayInputStream(receivePacket.getData());
-			//System.out.println(" baiss Server packet: " + baiss.read());
 			while (streaming == true ) {
-				System.out.println(" streaming is: " + true);
 				try {
 					serverSocket.receive(receivePacket);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				System.out.println(" baiss Server packet: " + baiss.read());
 				String requestText = new String(receivePacket.getData());
-				//System.out.println("in streaming Server requestText: " + requestText);
 				InetAddress requestAddress = receivePacket.getAddress();
-				System.out.println("requestAddress " + receivePacket.getAddress().toString());
 				currentSpeakerAddress=requestAddress;
 					notifyToTalk(requestAddress);
 					
 				
 				if (requestText.contains("Raise Hand")) {
 					
-						System.out.println(requestAddress.getHostAddress() + " is online");
 						notifyToTalk(requestAddress);
 						audioFormat = new AudioFormat(sampleRate, 16, 1, true, false);
 					       
@@ -91,8 +85,6 @@ public class AudioThread implements Runnable {
 				} else if (requestText.contains("Withdraw")) {
 					
 					
-					System.out.println("WITHDRAW RECEIVED" );
-					  //notifyToStop(requestAddress);
 						
 					sourceDataLine.drain();
 					sourceDataLine.close();		
@@ -102,7 +94,7 @@ public class AudioThread implements Runnable {
 			        //volumeControl.setValue(2.056f);
 					ais = new AudioInputStream(baiss, audioFormat, receivePacket.getLength());
 					toSpeaker(receivePacket.getData());
-					System.out.println(i++ + " " + receivePacket.getLength());
+					
 				}
 			 //packetnumber++;
 			}//end while
@@ -115,7 +107,7 @@ public class AudioThread implements Runnable {
 			try {
 				sourceDataLine.write(soundbytes, 0, soundbytes.length);
 			} catch (Exception e) {
-				System.out.println("Not working in speakers...");
+				
 			}
 		}
 
@@ -130,7 +122,7 @@ public class AudioThread implements Runnable {
 				public void run() {
 					try {
 						new DatagramSocket().send(new DatagramPacket(request, request.length, nextSpeaker, port));
-					//	System.out.println("Permission given to " + nextSpeaker.getHostAddress());
+					
 					}  catch (Exception e) {
 					}
 				}

@@ -56,9 +56,7 @@ public class Server
         {
         	serverSessionId=(int)(Math.random()*10000);
         }while(serverSessionId/1000==0);
-       
-        System.out.println(serverIpAddress);
-        System.out.println(serverSessionId);
+
        
     }
     
@@ -83,7 +81,6 @@ public class Server
 		 * these students have audio and text doubts
 		 */
 		
-		/*
 		new Student("Lavish Kothari","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Rakshit","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Kavleen","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
@@ -122,8 +119,6 @@ public class Server
     	new Student("xyz sharma","159","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
     	new Student("pqr sharma","159","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
     	new Student("Lavish","159","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
-		
-		*/
 		
 		new Server();
 		

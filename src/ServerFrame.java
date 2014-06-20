@@ -23,6 +23,9 @@ import java.awt.event.*;
 
 public class ServerFrame extends JFrame implements ActionListener,ChangeListener,MouseListener
 {
+	/*
+	  adding a menu bar
+	 */
 	MenuBar menuBar;
 	Menu menu;
 	MenuItem newMenuItem,exportMenuItem,exitMenuItem,checkForNonSenseMenuItem,watchWaitingListMenuItem;
@@ -64,7 +67,16 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	{
 		super("Class Room Interaction");
 		
-		
+		/**************************/
+		/*
+		 *  set the look and feel to reflect the platform
+		 */
+		try { 
+		    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+		/*************************/
 		ServerFrame.professorName=professorName;
 		ServerFrame.departmentName=departmentName;
 		ServerFrame.subjectName=subjectName;
@@ -177,6 +189,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		bottomPanel.add(waitingButton);
 		
 		textPanel=new JPanel();
+		textPanel.setBackground(Color.WHITE);
 		textPanel.setLayout(new BorderLayout(10,10));
 		tabbedPane=new JTabbedPane();
 		tabbedPane.addTab("Audio",audioPanel);
@@ -214,6 +227,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		//ipPanel.setBorder(new CompoundBorder(new LineBorder(Color.YELLOW, 2), new EmptyBorder(0, 0, 0, 0)));
 		ipPanel.addMouseListener(this);
 		
+		parentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		parentPanel.add(topPanel,BorderLayout.NORTH);
 		parentPanel.add(tabbedPane,BorderLayout.CENTER);
 		parentPanel.add(bottomPanel,BorderLayout.SOUTH);
@@ -369,6 +383,8 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 
 		int studentPanelHeight=(int)(this.getHeight()*0.11);
 		
+		int width=(int)(this.width*1.04); // -- new
+		
 		JPanel finalPanel=new JPanel();
 		finalPanel.setBackground(Color.WHITE);
 		finalPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 7));
@@ -427,7 +443,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	{
 
 		int studentPanelHeight=(int)(this.getHeight()*0.11);
-		
+		int width=(int)(this.width*1.04);
 		JPanel finalPanel=new JPanel();
 		finalPanel.setBackground(Color.WHITE);
 		finalPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 7));
@@ -490,7 +506,13 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 
 		if(ae.getSource()==newMenuItem)
 		{
-			System.out.println(this.getWidth()+"   "+this.getHeight());
+			/*
+			 * confirming whether the professor 
+			 * surely wants to start a new session
+			 */
+			if(JOptionPane.showConfirmDialog(this, "Are you sure, you want to start a new Session?","Confirm Dialog",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==JOptionPane.NO_OPTION)
+				return;
+			////////////////////////////////////
 			
 			if(AudioThread.th.isAlive())
 			{
@@ -610,6 +632,9 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		}
 		if(ae.getSource()==exitMenuItem)
 		{
+			if(JOptionPane.showConfirmDialog(this, "Are you sure, you want to exit?","Confirm Exit Dialog",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==JOptionPane.NO_OPTION)
+				return;
+			
 			System.exit(0);
 			return;
 		}
