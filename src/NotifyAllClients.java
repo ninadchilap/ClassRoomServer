@@ -6,14 +6,15 @@ import java.net.Socket;
 public class NotifyAllClients implements Runnable
 {
 	DataOutputStream dos;
-	 Socket client_speak;
+	 static Socket client_speak;
 	 String type,ip;
+	 static Thread th;
 	 NotifyAllClients(String ip,String type)
 	{
 		this.ip=ip;
 		this.type=type;
-		 Thread thread=new Thread(this);
-        thread.start();
+		th=new Thread(this);
+        th.start();
 	}
 	public void run() {
 		// TODO Auto-generated method stub

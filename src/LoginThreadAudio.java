@@ -16,13 +16,14 @@ class LoginThreadAudio implements Runnable
     Socket client;
     Server server;
     BufferedImage image;
+    static Thread th;
     LoginThreadAudio(Server server)
     {
     	System.out.println("Thread started");
         this.server=server;
         client=server.clientAudio;
-        Thread thread=new Thread(this);
-        thread.start();
+        th=new Thread(this);
+        th.start();
     }
 
     public void receiveFile(File file)throws IOException
@@ -89,7 +90,7 @@ class LoginThreadAudio implements Runnable
     				    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaasssssssssssssssssssssssssssssss11111111");
     				   // System.out.println("doubtText="+doubtText);
     				    
-    				    File outFile=new File("/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/"+macid+".jpg");
+    				    File outFile=new File("Images/"+macid+".jpg");
     				    
     				  //  receiveFile(outFile);
     				
@@ -120,6 +121,7 @@ class LoginThreadAudio implements Runnable
     								ServerFrame.refreshFrame();
     							}
     						}
+    				    	new NotifyAllClients("", "multi");
     				    }
     				    client.close();
     				}

@@ -24,18 +24,18 @@ public class AudioThread implements Runnable {
 		private static InetAddress currentSpeakerAddress;
 		public static final String PERMISSION_TEXT = "You may start talking";
 		public static final String STOP_TEXT = "You may stop talking";
-		
+		static DatagramSocket serverSocket = null;
          static int packetnumber=0;
-         
+         static Thread th;
          AudioThread()
          {
-        	 Thread th=new Thread(this);
+        	 th=new Thread(this);
         	 th.start();
          }
 		
 		public void run() {
 
-			DatagramSocket serverSocket = null;
+			
 			try {
 				serverSocket = new DatagramSocket(port);
 			} catch (SocketException e) {

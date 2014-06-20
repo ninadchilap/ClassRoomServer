@@ -3,12 +3,13 @@ import java.net.ServerSocket;
 
 public class AudioThread1 implements Runnable
 {
+	static Thread th;
 	Server server;
 	AudioThread1(Server server)
 	{
 		this.server=server;
-		Thread t=new Thread(this);
-		t.start();
+		th=new Thread(this);
+		th.start();
 	}
 	@Override
 	public void run() {

@@ -23,6 +23,11 @@ import java.awt.event.*;
 
 public class ServerFrame extends JFrame implements ActionListener,ChangeListener,MouseListener
 {
+	MenuBar menuBar;
+	Menu menu;
+	MenuItem newMenuItem,exportMenuItem,exitMenuItem,checkForNonSenseMenuItem,watchWaitingListMenuItem;
+	
+	
 	static ServerFrame currentObject;
 	JPanel topPanel,ipPanel,studentMsg,parentPanel,audioPanel,studentPanel,textPanel,detailsPanel;
 	/* all the other gui components are now added to this parentPanel */
@@ -53,10 +58,19 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	static LinkedList<JButton>addButtonText=new LinkedList<JButton>();
 	static LinkedList<JButton>deleteButtonText=new LinkedList<JButton>();
 	
-	ServerFrame()
+	static String professorName,departmentName,subjectName,topicName;
+	
+	ServerFrame(String professorName,String departmentName,String subjectName,String topicName)
 	{
 		super("Class Room Interaction");
-		WelcomeDialog welcomeDialog=new WelcomeDialog(this);
+		
+		
+		ServerFrame.professorName=professorName;
+		ServerFrame.departmentName=departmentName;
+		ServerFrame.subjectName=subjectName;
+		ServerFrame.topicName=topicName;
+		
+		WelcomeDialog welcomeDialog=new WelcomeDialog(this,professorName,departmentName,subjectName,topicName);
 		welcomeDialog.setVisible(true);
 		/*******************************************/
 		
@@ -71,7 +85,6 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		    {
 	    		i++;
 	    		filename="Images/print"+(i)+".txt";
-	    		
 		    }
 	    	
 		    fw = new FileWriter(filename,false);
@@ -204,8 +217,15 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		parentPanel.add(topPanel,BorderLayout.NORTH);
 		parentPanel.add(tabbedPane,BorderLayout.CENTER);
 		parentPanel.add(bottomPanel,BorderLayout.SOUTH);
-		add(parentPanel);
+		this.add(parentPanel);
+		this.setMenuBar(menuBar);
 		studentNumberComboBox.addActionListener(this);	
+		
+		newMenuItem.addActionListener(this);
+		exitMenuItem.addActionListener(this);
+		exportMenuItem.addActionListener(this);
+		checkForNonSenseMenuItem.addActionListener(this);
+		watchWaitingListMenuItem.addActionListener(this);
 		
 		//createBorderForMyPanels();
 		waitingButton.addActionListener(this);
@@ -230,6 +250,25 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		/* this method will initialize all the graphic components displayed
 		 * on the screen and ensuring that no NullPointerException is generated
 		 */
+		
+
+		menuBar=new MenuBar();
+		menu=new Menu("Menu");
+		newMenuItem=new MenuItem("New Server");
+		exportMenuItem=new MenuItem("Export");
+		checkForNonSenseMenuItem=new MenuItem("Check for Non-Sense");
+		watchWaitingListMenuItem=new MenuItem("Watch Waiting List");
+		exitMenuItem=new MenuItem("Exit");
+		
+		
+		menuBar.add(menu);
+		menu.add(newMenuItem);
+		menu.add(exportMenuItem);
+		menu.add(checkForNonSenseMenuItem);
+		menu.add(watchWaitingListMenuItem);
+		menu.addSeparator();
+		menu.add(exitMenuItem);
+		
 		
 		detailsPanel=new JPanel();
 		studentMsg=new JPanel();
@@ -431,7 +470,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		finalPanel.addMouseListener(this);
 		return finalPanel;
 	}
-/*
+	/*
 	public String appendString(String str)
 	{
 		for(int i=str.length();i<=30;i++)
@@ -439,13 +478,155 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		return str;
 	}
 	*/
+	/*
 	public Insets getInsets()
 	{
-		return new Insets(10,20,20,20);
+		return new Insets((int)(this.getHeight()*0.06),(int)(this.getHeight()*0.025),(int)(this.getHeight()*0.025),(int)(this.getHeight()*0.025));
 	}
-	
+	*/
+	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent ae)
 	{
+
+		if(ae.getSource()==newMenuItem)
+		{
+			System.out.println(this.getWidth()+"   "+this.getHeight());
+			
+			if(AudioThread.th.isAlive())
+			{
+				System.out.println("this thread for stopping the thread is working");
+				AudioThread.th.stop();
+			}
+			if(AudioThread1.th.isAlive())
+			{
+				AudioThread1.th.stop();
+			}
+			if(LoginThreadAudio.th.isAlive())
+			{
+				LoginThreadAudio.th.stop();
+			}
+			if(LoginThreadText.th.isAlive())
+			{
+				LoginThreadText.th.stop();
+			}
+			if(NotificationToSpeak.th.isAlive())
+			{
+				NotificationToSpeak.th.stop();
+			}
+			if(NotifyAllClients.th.isAlive())
+			{
+				NotifyAllClients.th.stop();
+			}
+			if(TextThread.th.isAlive())
+			{
+				TextThread.th.stop();
+			}
+			
+			//////////////////////////////////////
+			  
+			if(Server.serverSocketAudio!=null)
+				try {
+					System.out.println("one thing done");
+					Server.serverSocketAudio.close();
+					Server.serverSocketAudio=null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    	
+	    	if(Server.serverSocketText!=null)
+				try {
+					Server.serverSocketText.close();
+					Server.serverSocketText=null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    	
+	    	
+	    	if(Server.clientAudio!=null)
+				try {
+					Server.clientAudio.close();
+					Server.clientAudio=null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    	
+	    	if(Server.clientText!=null)
+				try {
+					Server.clientText.close();
+					Server.clientText=null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    	
+	    	if(AudioThread.serverSocket!=null)
+	    	{
+	    		AudioThread.serverSocket.close();
+	    		AudioThread.serverSocket=null;
+	    	
+	    	}
+	    	
+	    	if(NotificationToSpeak.client_speak!=null)
+				try {
+					NotificationToSpeak.client_speak.close();
+					NotificationToSpeak.client_speak=null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    	
+	    	
+	    	if(NotifyAllClients.client_speak!=null)
+	    	{
+	    		try {
+					NotifyAllClients.client_speak.close();
+					NotifyAllClients.client_speak=null;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	}
+	    	
+	    	/////////////////////////////////////////////////////////////////////////////////////////////
+			this.dispose();
+			Server.mainExecution(WelcomeDialog.professorsName,WelcomeDialog.departmentName,"","");
+			return;
+		}
+		if(ae.getSource()==exportMenuItem)
+		{
+			System.out.println("sys2");
+			/*
+			 * this code will be given later
+			 */
+			return;
+		}
+		if(ae.getSource()==checkForNonSenseMenuItem)
+		{
+			System.out.println("sys3");
+			return;
+		}
+		if(ae.getSource()==exitMenuItem)
+		{
+			System.exit(0);
+			return;
+		}
+		if(ae.getSource()==watchWaitingListMenuItem)
+		{
+			if(tabbedPane.getSelectedIndex()==0)
+			{
+				new WaitingDialogForAudio(currentObject).setVisible(true);
+			}
+			else if(tabbedPane.getSelectedIndex()==1)
+			{
+				new WaitingDialogForText(currentObject).setVisible(true);
+			}
+			return;
+		}
+		
+	///////////////////////////////////////////////////////
 		if(ae.getSource()==waitingButton)
 		{
 			if(tabbedPane.getSelectedIndex()==0)

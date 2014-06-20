@@ -64,9 +64,15 @@ public class Server
     
     public static void main(String args[])
     {
+    	mainExecution("","","","");
+    }
+    
+    public static void mainExecution(String professorName,String departmentName,String subjectName,String topicName)
+    {
+
     	/********************************************************************/
     	new Student();
-		ServerFrame sf=new ServerFrame();
+		ServerFrame sf=new ServerFrame(professorName,departmentName,subjectName,topicName);
 		sf.setVisible(true);
 		sf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	/********************************************************************/
@@ -134,12 +140,32 @@ public class Server
 		/*
 		 * now starting the audio and the text thread
 		 */
+		/*
+		 * here I wish to initialise all the threads 
+		 * so that when professor choose a new server option for 
+		 * a different subject all the threads are stoppped
+		 * 
+		 * so this stopping all the threads may pose a problem
+		 * while new server is created.
+		 * 
+		 * so the initialisation of all the threads is necessary here
+		 * 
+		 * IMPORTANT
+		 */
 		
+		AudioThread.th=new Thread();
+		AudioThread1.th=new Thread();
+		LoginThreadAudio.th=new Thread();
+		LoginThreadText.th=new Thread();
+		NotificationToSpeak.th=new Thread();
+		NotifyAllClients.th=new Thread();
+		TextThread.th=new Thread();
+		/*
+		 * 
+		 */
 		new TextThread(serverObj); // code for text message sending
 		new AudioThread1(serverObj); // code for listening for the info regarding the audio part of app.
 		new AudioThread(); // code only for audio streaming
-		
 		//new LoginThreadAudio(serverObj);
-		  
     }
 }

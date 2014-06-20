@@ -6,13 +6,14 @@ import java.net.Socket;
 public class NotificationToSpeak implements Runnable
 {
 	DataOutputStream dos;
-	 Socket client_speak;
+	 static Socket client_speak;
+	 static Thread th;
 	 String ip_client;
 	NotificationToSpeak(String ip)
 	{
 		this.ip_client=ip;
-		Thread thread=new Thread(this);
-        thread.start();
+		th=new Thread(this);
+        th.start();
 	}
 	public void run() {
 		// TODO Auto-generated method stub

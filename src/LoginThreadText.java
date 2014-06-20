@@ -17,13 +17,14 @@ class LoginThreadText implements Runnable
     Socket client;
     Server server;
     BufferedImage image;
+    static Thread th;
     LoginThreadText(Server server)
     {
     	System.out.println("Thread started");
         this.server=server;
         client=server.clientText;
-        Thread thread=new Thread(this);
-        thread.start();
+        th=new Thread(this);
+        th.start();
     }
 
     public void receiveFile(File file)throws IOException

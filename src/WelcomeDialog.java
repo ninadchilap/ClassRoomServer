@@ -19,9 +19,16 @@ public class WelcomeDialog extends Dialog implements ActionListener
 	JTextField nameTextField,departmentTextField,subjectTextField,topicTextField;
 	public static String professorsName,departmentName,subjectName,topicName;
 	
-	WelcomeDialog(ServerFrame serverFrame)
+	WelcomeDialog(ServerFrame serverFrame,String professorName,String departmentName,String subjectName,String topicName)
 	{
+		
 		super(serverFrame,true);
+		
+		WelcomeDialog.professorsName=professorName;
+		WelcomeDialog.departmentName=departmentName;
+		WelcomeDialog.subjectName=subjectName;
+		WelcomeDialog.topicName=topicName;
+		
 		this.setResizable(false);
 		//this.setExtendedState(this.getExtendedState()|JFrame.MAXIMIZED_BOTH );
 		
@@ -93,9 +100,16 @@ public class WelcomeDialog extends Dialog implements ActionListener
 		topicLabel.setFont(font);
 		
 		nameTextField=new JTextField();
+		nameTextField.setText(professorsName);
+		
 		departmentTextField=new JTextField();
+		departmentTextField.setText(departmentName);
+		
 		subjectTextField=new JTextField();
+		subjectTextField.setText(subjectName);
+		
 		topicTextField=new JTextField();
+		topicTextField.setText(topicName);
 		
 		okButton=new JButton("OK");
 		cancelButton=new JButton("Cancel");
