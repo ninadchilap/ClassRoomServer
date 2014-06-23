@@ -106,13 +106,22 @@ class LoginThreadText implements Runnable
     				    System.out.println("doubtSubject="+doubtSubject);
     				    System.out.println("doubtText="+doubtText);
     				    
-    				    File outFile=new File("/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/"+macid+".jpg");
-    				    
+    				    String macid2=macid;
+    				   
+    				   macid2= macid2.replace(":","");	
+    				    //File outFile=new File("/Images/"+macid2+".jpg");
+    				    File outFile=new File("Images/"+macid2+".jpg");
+    				    System.out.println("111111111222222222"+macid2);
     				    receiveFile(outFile);
     				
-    				    System.out.println(outFile.getAbsolutePath());
+    				    System.out.println("file path "+outFile.getAbsolutePath());
+    				    
     				    new print_in_file(macid,username,roll,doubtSubject,doubtText);
     				    ip=client.getInetAddress()+"";
+    				    
+    				    char ip1[]=ip.toCharArray();
+    			        if(ip1[0]=='/')
+    			        	ip=new String(ip1,1,ip.length()-1);
     				    new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,doubtText,"text");
     				
     				    dos.writeUTF("received");

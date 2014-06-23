@@ -3,6 +3,7 @@ import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Enumeration;
 import javax.swing.JFrame;
 
@@ -28,19 +29,43 @@ public class Server
     	 * 
     	 */
         serverObj=this;
-        Enumeration e = null;
-        try {
-            e = NetworkInterface.getNetworkInterfaces();
-        } catch (SocketException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        InetAddress i = null;
+        OsCheck.OSType ostype=OsCheck.getOperatingSystemType();
+        
+        switch (ostype) {
+	    case Windows:
+			    	try {
+						serverIpAddress=InetAddress.getLocalHost().getHostAddress();
+					} catch (UnknownHostException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+			    	System.out.println("windows");
+			    	break;
+	    case MacOS:
+	    			System.out.println("MacOS");
+	    			break;
+	    case Linux: 
+			    	Enumeration e = null;
+			        try {
+			            e = NetworkInterface.getNetworkInterfaces();
+			        } catch (SocketException e1) {
+			            // TODO Auto-generated catch block
+			            e1.printStackTrace();
+			        }
+			        /* extracting the server ip address */
+			        NetworkInterface n = (NetworkInterface) e.nextElement();
+			        Enumeration ee = n.getInetAddresses();
+			         i = (InetAddress) ee.nextElement();
+			        i = (InetAddress) ee.nextElement();
+			        serverIpAddress=""+i;
+			    	System.out.println("Linux");
+			    	break;
+	    case Other:
+	    			break;
         }
-        /* extracting the server ip address */
-        NetworkInterface n = (NetworkInterface) e.nextElement();
-        Enumeration ee = n.getInetAddresses();
-        InetAddress i = (InetAddress) ee.nextElement();
-        i = (InetAddress) ee.nextElement();
-        serverIpAddress=""+i;
+        
+        
         char ip[]=serverIpAddress.toCharArray();
         if(ip[0]=='/')
         	serverIpAddress=new String(ip,1,serverIpAddress.length()-1);
@@ -60,10 +85,10 @@ public class Server
        
     }
     
-    public static void main(String args[])
+   /* public static void main(String args[])
     {
     	mainExecution("","","","");
-    }
+    }*/
     
     public static void mainExecution(String professorName,String departmentName,String subjectName,String topicName)
     {
@@ -81,7 +106,7 @@ public class Server
 		 * these students have audio and text doubts
 		 */
 		
-		new Student("Lavish Kothari","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+		/*new Student("Lavish Kothari","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Rakshit","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Kavleen","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Nonu","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
@@ -119,7 +144,7 @@ public class Server
     	new Student("xyz sharma","159","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
     	new Student("pqr sharma","159","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
     	new Student("Lavish","159","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
-		
+		*/
 		new Server();
 		
     	sf.ipLabel.setText("IP Address : "+serverIpAddress);

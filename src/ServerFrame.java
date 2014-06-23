@@ -26,6 +26,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	/*
 	  adding a menu bar
 	 */
+	int fileNumber;
 	MenuBar menuBar;
 	Menu menu;
 	MenuItem newMenuItem,exportMenuItem,exitMenuItem,checkForNonSenseMenuItem,watchWaitingListMenuItem;
@@ -63,6 +64,8 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	
 	static String professorName,departmentName,subjectName,topicName;
 	
+	static GeneralDialogBox gd;
+	
 	ServerFrame(String professorName,String departmentName,String subjectName,String topicName)
 	{
 		super("Class Room Interaction");
@@ -98,7 +101,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	    		i++;
 	    		filename="Images/print"+(i)+".txt";
 		    }
-	    	
+	    	fileNumber=i;
 		    fw = new FileWriter(filename,false);
 		    fw.write("Professor's Name : "+WelcomeDialog.professorsName+"\n");
 		    fw.write("Department : "+WelcomeDialog.departmentName+"\n");
@@ -181,7 +184,8 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		 * now here you have to create  a button that will show the status of waiting list.
 		 */
 		
-		waitingButton = new JButton("Waiting : "+studentNumberComboBox.getSelectedItem().toString());
+		//waitingButton = new JButton("Waiting : "+studentNumberComboBox.getSelectedItem().toString());
+		waitingButton = new JButton("Waiting : 0");
 
 		bottomPanel.add(listLabel);
 		bottomPanel.add(studentNumberComboBox);
@@ -347,11 +351,12 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		{
 			studentNumberComboBox.addItem(""+i);
 		}
+		studentNumberComboBox.setSelectedIndex(1);
 	}
 	
 
 	private void createAudioPanel()
-	{
+	{ 
 		audioPanel=new JPanel();
 		
 		audioPanel.setLayout(new BorderLayout(10,10));
@@ -619,10 +624,13 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		}
 		if(ae.getSource()==exportMenuItem)
 		{
-			System.out.println("sys2");
 			/*
 			 * this code will be given later
 			 */
+			/*
+			fileNumber will now contain the latest file to be uploaded to the server
+			*/
+			
 			return;
 		}
 		if(ae.getSource()==checkForNonSenseMenuItem)
@@ -720,9 +728,10 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 				 */
 				new NotificationToSpeak((Student.studentListAudio.get(i)).ip); // new
 				
-				new GeneralDialogBox(this, Student.studentListAudio.get(i)).setVisible(true);
+				gd=new GeneralDialogBox(this, Student.studentListAudio.get(i));
+				gd.setVisible(true);
 				//new NotifyAllClients(Student.studentListAudio.get(i).ip,"single_to_kick");
-				
+				new NotifyAllClients(Student.studentListAudio.get(i).ip,"single_to_kick");
 				
 				Student.studentListAudio.remove(i);
 				new NotifyAllClients("","multi");

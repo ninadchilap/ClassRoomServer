@@ -88,13 +88,24 @@ class LoginThreadAudio implements Runnable
     				    System.out.println("macid="+macid);
     				    System.out.println("doubtSubject="+doubtSubject);
     				    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaasssssssssssssssssssssssssssssss11111111");
-    				   // System.out.println("doubtText="+doubtText);
+    				   ///////////////////////SEND IMAGE////////////////
     				    
-    				    File outFile=new File("Images/"+macid+".jpg");
+    				    String macid2=macid;
+     				   
+     				   	macid2= macid2.replace(":","");	
+     				    //File outFile=new File("/Images/"+macid2+".jpg");
+     				    File outFile=new File("Images/"+macid2+".jpg");
+     				    System.out.println("111111111222222222"+macid2);
+     				    receiveFile(outFile);
+     				
+     				    System.out.println("file path "+outFile.getAbsolutePath());
     				    
-    				  //  receiveFile(outFile);
-    				
-    				    //System.out.println(outFile.getAbsolutePath());
+    				    
+    				    
+    				    
+    				    
+    				    
+    				    //////////////////////////////////////////////////////
     				    ip=client.getInetAddress()+"";
     				    
     				    char ip1[]=ip.toCharArray();
@@ -104,13 +115,15 @@ class LoginThreadAudio implements Runnable
     				    
     				    
     				    //new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,"","audio");
-    				    new Student(username,roll,macid,ip,"/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg",doubtSubject,"","audio");
+    				    new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,"","audio");
 
     				    new NotifyAllClients(ip,"single");
     				    //dos.writeUTF("received");
     				    String disconnectAudioDoubt=dis.readUTF();
     				    if(disconnectAudioDoubt.equals("kick_me_out"))
     				    {
+    				    	if(ServerFrame.gd!=null)
+    				    		ServerFrame.gd.dispose();
     				    	String currentMacId=dis.readUTF();
     				    	for(int i=0;i<Student.studentListAudio.size();i++)
     						{
