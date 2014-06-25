@@ -3,8 +3,11 @@ import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,9 +22,16 @@ public class WelcomeDialog extends Dialog implements ActionListener
 	JTextField nameTextField,departmentTextField,subjectTextField,topicTextField;
 	public static String professorsName,departmentName,subjectName,topicName;
 	
-	WelcomeDialog(ServerFrame serverFrame)
+	WelcomeDialog(ServerFrame serverFrame,String professorName,String departmentName,String subjectName,String topicName)
 	{
+		
 		super(serverFrame,true);
+		
+		WelcomeDialog.professorsName=professorName;
+		WelcomeDialog.departmentName=departmentName;
+		WelcomeDialog.subjectName=subjectName;
+		WelcomeDialog.topicName=topicName;
+		
 		this.setResizable(false);
 		//this.setExtendedState(this.getExtendedState()|JFrame.MAXIMIZED_BOTH );
 		
@@ -29,8 +39,10 @@ public class WelcomeDialog extends Dialog implements ActionListener
 		//this.setBounds(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds());
 		
 		initialiseGraphicComponents();
-		setSize(500,300);
-		setLocation(100,100);
+		//this.setLocationRelativeTo(null);
+		setSize(520,325);
+		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - getWidth()/2, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - getHeight()/2);
+		//setLocation(100,100);
 		headingPanel.add(headingLabel);
 		parentPanel.setLayout(new BorderLayout(10,10));
 		headingLabel.setFont(new Font("lucida console",Font.PLAIN,40));
@@ -63,7 +75,10 @@ public class WelcomeDialog extends Dialog implements ActionListener
 		parentPanel.add(headingPanel,BorderLayout.NORTH);
 		parentPanel.add(middlePanel,BorderLayout.CENTER);
 		parentPanel.add(buttonPanel,BorderLayout.SOUTH);
-		add(parentPanel);
+		
+		parentPanel.setBorder(BorderFactory.createEmptyBorder(10,40,10,30));
+		
+		this.add(parentPanel);
 		
 		addWindowListener(new DlgAdapter(this));
 		okButton.addActionListener(this);
@@ -93,17 +108,27 @@ public class WelcomeDialog extends Dialog implements ActionListener
 		topicLabel.setFont(font);
 		
 		nameTextField=new JTextField();
+		nameTextField.setText(professorsName);
+		
 		departmentTextField=new JTextField();
+		departmentTextField.setText(departmentName);
+		
 		subjectTextField=new JTextField();
+		subjectTextField.setText(subjectName);
+		
 		topicTextField=new JTextField();
+		topicTextField.setText(topicName);
 		
 		okButton=new JButton("OK");
 		cancelButton=new JButton("Cancel");
 	}
+	/*
+	 *
 	public Insets getInsets()
 	{
 		return new Insets(20,10,10,10);
 	}
+	*/
 	@Override
 	public void actionPerformed(ActionEvent ae) 
 	{
@@ -125,6 +150,9 @@ public class WelcomeDialog extends Dialog implements ActionListener
 		}
 		else if(ae.getSource()==cancelButton)
 		{
+			if(JOptionPane.showConfirmDialog(this, "Are you sure, you want to exit?","Confirm Exit Dialog",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==JOptionPane.NO_OPTION)
+				return;
+			
 			System.exit(1);
 		}
 	}

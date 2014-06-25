@@ -10,9 +10,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.LinkedList;
+
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,7 +28,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class WaitingDialogForAudio extends Dialog implements KeyListener,DocumentListener,ActionListener
+public class WaitingDialogForAudio extends JFrame implements KeyListener,DocumentListener,ActionListener,MouseListener
 {
 	LinkedList<JButton> tempAddButtonList,tempDeleteButtonList;
 	LinkedList<Student>tempStudentLinkedList;
@@ -32,15 +37,24 @@ public class WaitingDialogForAudio extends Dialog implements KeyListener,Documen
 	ServerFrame sf;
 	WaitingDialogForAudio(ServerFrame sf)
 	{
-		super(sf,true);
+		//super(sf,true);
 		this.sf=sf;
-		this.setSize(500,500);
-		this.setLocation(100,100);
+		//this.setSize(500,500);
+		//this.setLocation(100,100);
 		//this.setVisible(true);
-		this.setTitle("Search Dialog for Text");
+		//this.setResizable(false);
+		this.setExtendedState(this.getExtendedState()|JFrame.MAXIMIZED_BOTH );
+		this.setTitle("Search Dialog for Audio");
 		
 		
 		initializeGraphicComponents();
+		
+		/*
+		 * substitution for the getInsets method
+		 */
+		parentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+		
+		
 		parentPanel.setLayout(new BorderLayout(10,10));
 		scrollPanel.add(new JScrollPane(searchPanel),BorderLayout.CENTER);
 		parentPanel.add(scrollPanel,BorderLayout.CENTER);
@@ -110,26 +124,32 @@ public class WaitingDialogForAudio extends Dialog implements KeyListener,Documen
 		tempStudentLinkedList = new LinkedList();
 		tempAddButtonList=new LinkedList();
 		tempDeleteButtonList=new LinkedList();
-		for(int i=0;i<Student.studentListAudio.size();i++)
+		
+		if(searchField.getText().equals(""))
 		{
-			Student currentStudent=Student.studentListAudio.get(i);
-			if(currentStudent.studentName.indexOf(searchField.getText())!=-1 || currentStudent.doubtSubject.indexOf(searchField.getText())!=-1)
-			{
-				//System.out.println(currentStudent.studentName+"  -->  "+currentStudent.studentName.indexOf(searchField.getText()));
-				
-				JButton tickButton=new JButton("\u2714");
-				JButton crossButton=new JButton("X");
-				tickButton.addActionListener(this);
-				crossButton.addActionListener(this);
-				//ServerFrame.methodToAddActionListener(tickButton);
-				//ServerFrame.methodToAddActionListener(crossButton);
-				
-				tempAddButtonList.add(tickButton);
-				tempDeleteButtonList.add(crossButton);
-				
-				tempStudentLinkedList.add(currentStudent);
-			}
+			
 		}
+		else
+			for(int i=0;i<Student.studentListAudio.size();i++)
+			{
+				Student currentStudent=Student.studentListAudio.get(i);
+				if(currentStudent.studentName.indexOf(searchField.getText())!=-1 || currentStudent.doubtSubject.indexOf(searchField.getText())!=-1)
+				{
+					//System.out.println(currentStudent.studentName+"  -->  "+currentStudent.studentName.indexOf(searchField.getText()));
+					
+					JButton tickButton=new JButton("\u2714");
+					JButton crossButton=new JButton("X");
+					tickButton.addActionListener(this);
+					crossButton.addActionListener(this);
+					//ServerFrame.methodToAddActionListener(tickButton);
+					//ServerFrame.methodToAddActionListener(crossButton);
+					
+					tempAddButtonList.add(tickButton);
+					tempDeleteButtonList.add(crossButton);
+					
+					tempStudentLinkedList.add(currentStudent);
+				}
+			}
 		addStudentInSearchPanel(tempStudentLinkedList);
 		//System.out.println("size of tempStudentLinkedList = "+tempStudentLinkedList.size());
 		
@@ -154,8 +174,13 @@ public class WaitingDialogForAudio extends Dialog implements KeyListener,Documen
 		scrollPanel.setLayout(new GridLayout(1,1,10,10));
 		
 		searchPanel.setBackground(Color.WHITE);
-		searchPanel.setBorder(new CompoundBorder(new LineBorder(Color.YELLOW, 2), new EmptyBorder(0, 0, 0, 0)));
-		searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+		//searchPanel.setBorder(new CompoundBorder(new LineBorder(Color.YELLOW, 2), new EmptyBorder(0, 0, 0, 0)));
+		//searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+		
+		if(tempStudentLinkedList.size()<10)
+			searchPanel.setLayout(new GridLayout(9,1,1,1));
+		else
+			searchPanel.setLayout(new GridLayout(tempStudentLinkedList.size(),1,1,1));
 		
 		for(int i=0;i<tempStudentLinkedList.size();i++)
 		{
@@ -166,7 +191,7 @@ public class WaitingDialogForAudio extends Dialog implements KeyListener,Documen
 		scrollPanel.add(new JScrollPane(searchPanel));
 		parentPanel.add(searchField,BorderLayout.NORTH);
 		parentPanel.add(scrollPanel,BorderLayout.CENTER);
-		parentPanel.setBorder(new CompoundBorder(new LineBorder(Color.YELLOW, 2), new EmptyBorder(0, 0, 0, 0)));
+		//parentPanel.setBorder(new CompoundBorder(new LineBorder(Color.YELLOW, 2), new EmptyBorder(0, 0, 0, 0)));
 		parentPanel.revalidate();
 		searchPanel.revalidate();
 		scrollPanel.revalidate();
@@ -176,6 +201,9 @@ public class WaitingDialogForAudio extends Dialog implements KeyListener,Documen
 	{
 		int studentPanelHeight=(int)(this.getHeight()*0.11);
 		int studentPanelWidth=(int)(this.getWidth());
+		
+		int width=(int)(sf.width*1.04); // -- new
+		
 		
 		JPanel finalPanel=new JPanel();
 		finalPanel.setBackground(Color.WHITE);
@@ -189,52 +217,55 @@ public class WaitingDialogForAudio extends Dialog implements KeyListener,Documen
 		JPanel imagePanel=imagea.getResizeImage(); // --new
 		
 		//ImagePanel imagePanel=new ImagePanel(Student.studentListAudio.get(i).pic,(int)(width*0.1),studentPanelHeight);
-		imagePanel.setPreferredSize(new Dimension((int)(sf.width*0.1),studentPanelHeight));
-		imagePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
+		imagePanel.setPreferredSize(new Dimension((int)(width*0.1),studentPanelHeight));
+		//imagePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		JPanel namePanel=new JPanel();
-		namePanel.setPreferredSize(new Dimension((int)(sf.width*0.25),studentPanelHeight));
+		namePanel.setPreferredSize(new Dimension((int)(width*0.25),studentPanelHeight));
 		namePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, (int)(studentPanelHeight*0.3)));
 		JLabel studentNameLabel=new JLabel(student.studentName);
 		studentNameLabel.setFont(new Font("lucida console",Font.PLAIN,20));
 		namePanel.add(studentNameLabel);
-		namePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
+		//namePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		JPanel doubtPanel=new JPanel();
-		doubtPanel.setPreferredSize(new Dimension((int)(sf.width*0.45),studentPanelHeight));
+		doubtPanel.setPreferredSize(new Dimension((int)(width*0.45),studentPanelHeight));
 		doubtPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, (int)(studentPanelHeight*0.3)));
 		JLabel doubtSubjectLabel=new JLabel(student.doubtSubject);
 		doubtSubjectLabel.setFont(new Font("lucida console",Font.PLAIN,20));
 		doubtPanel.add(doubtSubjectLabel);
-		doubtPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
+		//doubtPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		JPanel addButtonPanel=new JPanel();
-		addButtonPanel.setPreferredSize(new Dimension((int)(sf.width*0.05),studentPanelHeight));
+		addButtonPanel.setPreferredSize(new Dimension((int)(width*0.05),studentPanelHeight));
 		addButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, (int)(studentPanelHeight*0.3)));
 		addButtonPanel.add(tempAddButtonList.get(i));
-		addButtonPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
+		//addButtonPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		JPanel deleteButtonPanel=new JPanel();
-		deleteButtonPanel.setPreferredSize(new Dimension((int)(sf.width*0.05),studentPanelHeight));
+		deleteButtonPanel.setPreferredSize(new Dimension((int)(width*0.05),studentPanelHeight));
 		deleteButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, (int)(studentPanelHeight*0.3)));
 		deleteButtonPanel.add(tempDeleteButtonList.get(i));
-		deleteButtonPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
+		//deleteButtonPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(0, 0, 0, 0)));
 		
 		finalPanel.add(imagePanel);
 		finalPanel.add(namePanel);
 		finalPanel.add(doubtPanel);
 		finalPanel.add(addButtonPanel);
 		finalPanel.add(deleteButtonPanel);
+		finalPanel.addMouseListener(this);
 		
 		return finalPanel;
 	}
 
+	/*
 	
 	public Insets getInsets()
 	{
 		return new Insets(30,20,20,20);
 	}
-
+	*/
+	
 	@Override
 	public void changedUpdate(DocumentEvent arg0) 
 	{
@@ -469,5 +500,37 @@ public class WaitingDialogForAudio extends Dialog implements KeyListener,Documen
 			
 		}
 	*/	
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		((JPanel)(e.getSource())).setBorder(new CompoundBorder(new LineBorder(Color.RED, 2), new EmptyBorder(0, 0, 0, 0)));
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		((JPanel)(e.getSource())).setBorder(new EmptyBorder(0, 0, 0, 0));
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

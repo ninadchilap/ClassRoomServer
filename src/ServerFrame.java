@@ -1,6 +1,5 @@
 /*
- * 
- * This class contains all the basic gui coding
+ *  This class contains all the basic gui coding 
  * of the main server screen visible to the Professor.
  * 
  * the top right area of the screen contains ip address
@@ -8,7 +7,10 @@
  * 
  */
 
-import java.util.LinkedList; 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -21,28 +23,101 @@ import java.awt.event.*;
 
 public class ServerFrame extends JFrame implements ActionListener,ChangeListener,MouseListener
 {
+	/*
+	  adding a menu bar
+	 */
+	int fileNumber;
+	MenuBar menuBar;
+	Menu menu;
+	MenuItem newMenuItem,exportMenuItem,exitMenuItem,checkForNonSenseMenuItem,watchWaitingListMenuItem;
+	
+	
 	static ServerFrame currentObject;
 	JPanel topPanel,ipPanel,studentMsg,parentPanel,audioPanel,studentPanel,textPanel,detailsPanel;
 	/* all the other gui components are now added to this parentPanel */
 	static JTabbedPane tabbedPane;
-	JLabel ipLabel,sessionIdLabel,ipValueLabel,sessionIdValueLabel,appName;
+	JLabel ipLabel,sessionIdLabel;
 	public int width,height;
 	static JButton waitingButton;
+	static String ipAddressString,sessionIdString;
+	/*
+	 * this comboBox is provided to the professor so that professor can select any number of students 
+	 * that will be visible in the audio or text panel.
+	 * 
+	 * Professor can select any number in the combo box to limit the number of Visible students to avoid clumpsiness
+	 */
 	static JComboBox studentNumberComboBox;
 	
 	String ipAddress=Server.serverIpAddress,sessionId=""+Server.serverSessionId;
+	
+	/*
+	 * Button linkedList for the Audio section of the App
+	 */
 	static LinkedList<JButton>addButton=new LinkedList<JButton>();
 	static LinkedList<JButton>deleteButton=new LinkedList<JButton>();
 	
+	/*
+	 * Button linkedList for the text section of the app
+	 */
 	static LinkedList<JButton>addButtonText=new LinkedList<JButton>();
 	static LinkedList<JButton>deleteButtonText=new LinkedList<JButton>();
 	
-	ServerFrame()
+	static String professorName,departmentName,subjectName,topicName;
+	
+	static GeneralDialogBox gd;
+	
+	ServerFrame(String professorName,String departmentName,String subjectName,String topicName)
 	{
 		super("Class Room Interaction");
-		WelcomeDialog welcomeDialog=new WelcomeDialog(this);
+		
+		/**************************/
+		/*
+		 *  set the look and feel to reflect the platform
+		 */
+		try { 
+		    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+		/*************************/
+		ServerFrame.professorName=professorName;
+		ServerFrame.departmentName=departmentName;
+		ServerFrame.subjectName=subjectName;
+		ServerFrame.topicName=topicName;
+		
+		WelcomeDialog welcomeDialog=new WelcomeDialog(this,professorName,departmentName,subjectName,topicName);
 		welcomeDialog.setVisible(true);
-		System.out.println("hello Kavleen Kalra");
+		/*******************************************/
+		
+		/****************************************/
+
+    	String filename= "Images/print.txt";
+        FileWriter fw;
+	    try 
+	    {
+	    	int i=0;
+	    	while(new File(filename).exists())
+		    {
+	    		i++;
+	    		filename="Images/print"+(i)+".txt";
+		    }
+	    	fileNumber=i;
+		    fw = new FileWriter(filename,false);
+		    fw.write("Professor's Name : "+WelcomeDialog.professorsName+"\n");
+		    fw.write("Department : "+WelcomeDialog.departmentName+"\n");
+		    fw.write("Subject : "+WelcomeDialog.subjectName+"\n");
+		    fw.write("Topic : "+WelcomeDialog.topicName+"\n"+"\n"+"\n");
+		    
+		    
+		    fw.write(String.format("%-20s%s", "USERNAME","DOUBT TEXT\n\n\n"));
+		    fw.close();
+	    } 
+	    catch (IOException e1) {
+	    	// TODO Auto-generated catch block
+	    	e1.printStackTrace();
+	    } //the true will append the new data
+	       
+	    /******************************************/
 		currentObject=this;
 		/* initializeGraphicComponents();
 		 * 
@@ -65,6 +140,9 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		textPanel.add(studentMsg,BorderLayout.CENTER);
 		
 		///////////////////////////////////////
+		/*
+		 * the following function is used to maximize the ServerFrame
+		 */
 		this.setExtendedState(this.getExtendedState()|JFrame.MAXIMIZED_BOTH );
 		setLocation(0,0); // setting the location of the frame
 		
@@ -80,9 +158,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		 * adding different components to the ipPanel
 		*/
 		ipPanel.add(ipLabel);
-		//ipPanel.add(ipValueLabel);
 		ipPanel.add(sessionIdLabel);
-		//ipPanel.add(sessionIdValueLabel);
 		
 		/*
 		 * there are two tabbedPanes in the center of the screen
@@ -108,7 +184,8 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		 * now here you have to create  a button that will show the status of waiting list.
 		 */
 		
-		waitingButton = new JButton("Waiting Status : "+studentNumberComboBox.getSelectedItem().toString());
+		//waitingButton = new JButton("Waiting : "+studentNumberComboBox.getSelectedItem().toString());
+		waitingButton = new JButton("Waiting : 0");
 
 		bottomPanel.add(listLabel);
 		bottomPanel.add(studentNumberComboBox);
@@ -116,6 +193,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		bottomPanel.add(waitingButton);
 		
 		textPanel=new JPanel();
+		textPanel.setBackground(Color.WHITE);
 		textPanel.setLayout(new BorderLayout(10,10));
 		tabbedPane=new JTabbedPane();
 		tabbedPane.addTab("Audio",audioPanel);
@@ -150,24 +228,39 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		topPanel.add(detailsPanel,BorderLayout.CENTER);
 		topPanel.add(ipPanel,BorderLayout.EAST);
 		
+		//ipPanel.setBorder(new CompoundBorder(new LineBorder(Color.YELLOW, 2), new EmptyBorder(0, 0, 0, 0)));
+		ipPanel.addMouseListener(this);
+		
+		parentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		parentPanel.add(topPanel,BorderLayout.NORTH);
 		parentPanel.add(tabbedPane,BorderLayout.CENTER);
 		parentPanel.add(bottomPanel,BorderLayout.SOUTH);
-		add(parentPanel);
+		this.add(parentPanel);
+		this.setMenuBar(menuBar);
 		studentNumberComboBox.addActionListener(this);	
+		
+		newMenuItem.addActionListener(this);
+		exitMenuItem.addActionListener(this);
+		exportMenuItem.addActionListener(this);
+		checkForNonSenseMenuItem.addActionListener(this);
+		watchWaitingListMenuItem.addActionListener(this);
 		
 		//createBorderForMyPanels();
 		waitingButton.addActionListener(this);
 		tabbedPane.addChangeListener(this);
 	}
 
-	private void createBorderForMyPanels()
+	private void createBorderForMyPanels() // this method is used for the debugging purpose
 	{
+		/*
+		 * although this method is never called 
+		 * one can use this method for the debugging purpose to find all the different panels
+		 */
 		audioPanel.setBorder(new CompoundBorder(new LineBorder(Color.YELLOW, 2), new EmptyBorder(0, 0, 0, 0)));
 		parentPanel.setBorder(new CompoundBorder(new LineBorder(Color.RED, 2), new EmptyBorder(0, 0, 0, 0)));
 		topPanel.setBorder(new CompoundBorder(new LineBorder(Color.RED, 2), new EmptyBorder(0, 0, 0, 0)));
 		ipPanel.setBorder(new CompoundBorder(new LineBorder(Color.YELLOW, 2), new EmptyBorder(4, 4, 4, 4)));
-		//studentMsg.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(4, 4, 4, 4)));
+		studentMsg.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(4, 4, 4, 4)));
 		
 	}
 	private void initializeGraphicComponents()
@@ -175,6 +268,26 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		/* this method will initialize all the graphic components displayed
 		 * on the screen and ensuring that no NullPointerException is generated
 		 */
+		
+
+		menuBar=new MenuBar();
+		menu=new Menu("Menu");
+		newMenuItem=new MenuItem("New Server");
+		exportMenuItem=new MenuItem("Export");
+		checkForNonSenseMenuItem=new MenuItem("Check for Non-Sense");
+		watchWaitingListMenuItem=new MenuItem("Watch Waiting List");
+		exitMenuItem=new MenuItem("Exit");
+		
+		
+		menuBar.add(menu);
+		menu.add(newMenuItem);
+		menu.add(exportMenuItem);
+		menu.add(checkForNonSenseMenuItem);
+		menu.add(watchWaitingListMenuItem);
+		menu.addSeparator();
+		menu.add(exitMenuItem);
+		
+		
 		detailsPanel=new JPanel();
 		studentMsg=new JPanel();
 		parentPanel=new JPanel();
@@ -183,9 +296,6 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		audioPanel=new JPanel();
 		studentPanel=new JPanel();
 		textPanel=new JPanel();
-		
-		appName=new JLabel("App Name");
-		appName.setFont(new Font("lucida console",Font.PLAIN,70));
 		
 		for(int i=0;i<Student.studentListAudio.size();i++)
 		{
@@ -217,32 +327,36 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		width = (int)screenSize.getWidth();
 		height = (int)screenSize.getHeight();
 		
+		/*
+		 * ipLabel contains the ipAddress of the Professor
+		 */
 		ipLabel=new JLabel("IP Address : "+ipAddress);
 		ipLabel.setFont(new Font("lucida console",Font.PLAIN,30));
+		
+		/*
+		 * SessionIdLabel contains the unique Session id of the lecture
+		 */
 		sessionIdLabel=new JLabel("Session ID : "+sessionId);
 		sessionIdLabel.setFont(new Font("lucida console",Font.PLAIN,30));
-		
-		ipValueLabel=new JLabel(ipAddress);
-		ipValueLabel.setFont(new Font("lucida console",Font.PLAIN,30));
-		
-		sessionIdValueLabel=new JLabel(sessionId);
-		sessionIdValueLabel.setFont(new Font("lucida console",Font.PLAIN,30));
 		
 		studentNumberComboBox=new JComboBox();
 
 		
-		/* inserting different values in the  comboBox 
+		/* 
+		 * inserting different values in the  comboBox 
 		 * providing Proff the choice to select any number number of students to be currently visible
 		 */
-		for(int i=0;i<=100;i++)
+		
+		for(int i=0;i<=200;i++)
 		{
 			studentNumberComboBox.addItem(""+i);
 		}
+		studentNumberComboBox.setSelectedIndex(1);
 	}
 	
 
 	private void createAudioPanel()
-	{
+	{ 
 		audioPanel=new JPanel();
 		
 		audioPanel.setLayout(new BorderLayout(10,10));
@@ -258,6 +372,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		audioPanel.setBackground(Color.white);
 		
 	}
+	
 	private void createTextPanel()
 	{
 		textPanel=new JPanel();
@@ -272,6 +387,8 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	{
 
 		int studentPanelHeight=(int)(this.getHeight()*0.11);
+		
+		int width=(int)(this.width*1.04); // -- new
 		
 		JPanel finalPanel=new JPanel();
 		finalPanel.setBackground(Color.WHITE);
@@ -326,11 +443,12 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		finalPanel.addMouseListener(this);
 		return finalPanel;
 	}
+	
 	public JPanel createStudentPanel(int i,Student student)
 	{
 
 		int studentPanelHeight=(int)(this.getHeight()*0.11);
-		
+		int width=(int)(this.width*1.04);
 		JPanel finalPanel=new JPanel();
 		finalPanel.setBackground(Color.WHITE);
 		finalPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 7));
@@ -373,21 +491,175 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		finalPanel.addMouseListener(this);
 		return finalPanel;
 	}
-
+	/*
 	public String appendString(String str)
 	{
 		for(int i=str.length();i<=30;i++)
 			str=str+" ";
 		return str;
 	}
-	
+	*/
+	/*
 	public Insets getInsets()
 	{
-		return new Insets(10,20,20,20);
+		return new Insets((int)(this.getHeight()*0.06),(int)(this.getHeight()*0.025),(int)(this.getHeight()*0.025),(int)(this.getHeight()*0.025));
 	}
-	
+	*/
+	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent ae)
 	{
+
+		if(ae.getSource()==newMenuItem)
+		{
+			/*
+			 * confirming whether the professor 
+			 * surely wants to start a new session
+			 */
+			if(JOptionPane.showConfirmDialog(this, "Are you sure, you want to start a new Session?","Confirm Dialog",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==JOptionPane.NO_OPTION)
+				return;
+			////////////////////////////////////
+			
+			if(AudioThread.th.isAlive())
+			{
+				System.out.println("this thread for stopping the thread is working");
+				AudioThread.th.stop();
+			}
+			if(AudioThread1.th.isAlive())
+			{
+				AudioThread1.th.stop();
+			}
+			if(LoginThreadAudio.th.isAlive())
+			{
+				LoginThreadAudio.th.stop();
+			}
+			if(LoginThreadText.th.isAlive())
+			{
+				LoginThreadText.th.stop();
+			}
+			if(NotificationToSpeak.th.isAlive())
+			{
+				NotificationToSpeak.th.stop();
+			}
+			if(NotifyAllClients.th.isAlive())
+			{
+				NotifyAllClients.th.stop();
+			}
+			if(TextThread.th.isAlive())
+			{
+				TextThread.th.stop();
+			}
+			
+			//////////////////////////////////////
+			  
+			if(Server.serverSocketAudio!=null)
+				try {
+					System.out.println("one thing done");
+					Server.serverSocketAudio.close();
+					Server.serverSocketAudio=null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    	
+	    	if(Server.serverSocketText!=null)
+				try {
+					Server.serverSocketText.close();
+					Server.serverSocketText=null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    	
+	    	
+	    	if(Server.clientAudio!=null)
+				try {
+					Server.clientAudio.close();
+					Server.clientAudio=null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    	
+	    	if(Server.clientText!=null)
+				try {
+					Server.clientText.close();
+					Server.clientText=null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    	
+	    	if(AudioThread.serverSocket!=null)
+	    	{
+	    		AudioThread.serverSocket.close();
+	    		AudioThread.serverSocket=null;
+	    	
+	    	}
+	    	
+	    	if(NotificationToSpeak.client_speak!=null)
+				try {
+					NotificationToSpeak.client_speak.close();
+					NotificationToSpeak.client_speak=null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    	
+	    	
+	    	if(NotifyAllClients.client_speak!=null)
+	    	{
+	    		try {
+					NotifyAllClients.client_speak.close();
+					NotifyAllClients.client_speak=null;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	}
+	    	
+	    	/////////////////////////////////////////////////////////////////////////////////////////////
+			this.dispose();
+			Server.mainExecution(WelcomeDialog.professorsName,WelcomeDialog.departmentName,"","");
+			return;
+		}
+		if(ae.getSource()==exportMenuItem)
+		{
+			/*
+			 * this code will be given later
+			 */
+			/*
+			fileNumber will now contain the latest file to be uploaded to the server
+			*/
+			
+			return;
+		}
+		if(ae.getSource()==checkForNonSenseMenuItem)
+		{
+			System.out.println("sys3");
+			return;
+		}
+		if(ae.getSource()==exitMenuItem)
+		{
+			if(JOptionPane.showConfirmDialog(this, "Are you sure, you want to exit?","Confirm Exit Dialog",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==JOptionPane.NO_OPTION)
+				return;
+			
+			System.exit(0);
+			return;
+		}
+		if(ae.getSource()==watchWaitingListMenuItem)
+		{
+			if(tabbedPane.getSelectedIndex()==0)
+			{
+				new WaitingDialogForAudio(currentObject).setVisible(true);
+			}
+			else if(tabbedPane.getSelectedIndex()==1)
+			{
+				new WaitingDialogForText(currentObject).setVisible(true);
+			}
+			return;
+		}
+		
+	///////////////////////////////////////////////////////
 		if(ae.getSource()==waitingButton)
 		{
 			if(tabbedPane.getSelectedIndex()==0)
@@ -415,7 +687,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 			studentPanel=new JPanel();
 			studentPanel.setBackground(Color.WHITE);
 			
-			if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
+			if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5 || Student.studentListAudio.size()<=5)
 				studentPanel.setLayout(new GridLayout(5,1,10,10));
 			else			
 				studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
@@ -432,7 +704,8 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 			studentMsg.removeAll();
 			studentMsg=new JPanel();
 			studentMsg.setBackground(Color.WHITE);
-			if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
+			
+			if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5 || Student.studentListText.size()<=5)
 				studentMsg.setLayout(new GridLayout(5,1,10,10));
 			else
 				studentMsg.setLayout(new BoxLayout(studentMsg, BoxLayout.Y_AXIS));
@@ -450,13 +723,28 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		{
 			if(ae.getSource()==addButton.get(i))
 			{
-				new GeneralDialogBox(this, Student.studentListAudio.get(i)).setVisible(true);
+				/*
+				 * Sending the client the permission to speak - server says - "its your turn"
+				 */
+				new NotificationToSpeak((Student.studentListAudio.get(i)).ip); // new
+				
+				gd=new GeneralDialogBox(this, Student.studentListAudio.get(i));
+				gd.setVisible(true);
+				//new NotifyAllClients(Student.studentListAudio.get(i).ip,"single_to_kick");
+				new NotifyAllClients(Student.studentListAudio.get(i).ip,"single_to_kick");
+				
 				Student.studentListAudio.remove(i);
+				new NotifyAllClients("","multi");
+				
+				/*
+				 * now broadcast the respective queue number to each client
+				 */
+				//new NotifyAllClients(); // new
 				
 				audioPanel.removeAll();
 				studentPanel.removeAll();
 				studentPanel=new JPanel();
-				if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
+				if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5 || Student.studentListAudio.size()<=5)
 					studentPanel.setLayout(new GridLayout(5,1,10,10));
 				else
 					studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
@@ -480,12 +768,16 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 			}
 			if(ae.getSource()==deleteButton.get(i))
 			{
+				
+				new NotifyAllClients(Student.studentListAudio.get(i).ip,"single_to_kick");
+				
 				Student.studentListAudio.remove(i);
+				new NotifyAllClients("","multi");
 				
 				audioPanel.removeAll();
 				studentPanel.removeAll();
 				studentPanel=new JPanel();
-				if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
+				if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5 || Student.studentListAudio.size()<=5)
 					studentPanel.setLayout(new GridLayout(5,1,10,10));
 				else
 					studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
@@ -520,7 +812,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 				textPanel.removeAll();
 				studentMsg.removeAll();
 				studentMsg=new JPanel();
-				if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
+				if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5 || Student.studentListText.size()<=5)
 					studentMsg.setLayout(new GridLayout(5,1,10,10));
 				else
 					studentMsg.setLayout(new BoxLayout(studentMsg, BoxLayout.Y_AXIS));
@@ -550,7 +842,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 				textPanel.removeAll();
 				studentMsg.removeAll();
 				studentMsg=new JPanel();
-				if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
+				if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5 || Student.studentListText.size()<=5)
 					studentMsg.setLayout(new GridLayout(5,1,10,10));
 				else
 					studentMsg.setLayout(new BoxLayout(studentMsg, BoxLayout.Y_AXIS));
@@ -623,15 +915,28 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
 		((JPanel)(e.getSource())).setBorder(new CompoundBorder(new LineBorder(Color.RED, 2), new EmptyBorder(0, 0, 0, 0)));
-		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		//setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		if(e.getSource()==ipPanel)
+		{
+			setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			
+			return;
+		}
+		
 	
 	}
-
+    
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+		((JPanel)(e.getSource())).setBorder(new EmptyBorder(0, 0, 0, 0));
+		//setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		if(e.getSource()==ipPanel)
+		{
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			return;
+		}// TODO Auto-generated method stub
 		((JPanel)(e.getSource())).setBorder(new CompoundBorder(new LineBorder(Color.WHITE, 2), new EmptyBorder(0, 0, 0, 0)));
-		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		//setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	@Override
@@ -643,6 +948,8 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
+		if(e.getSource()==ipPanel)
+			new FocusedIpPanel(this).setVisible(true);
 		
 	}
 	
@@ -652,7 +959,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		audioPanel.removeAll();
 		studentPanel.removeAll();
 		studentPanel=new JPanel();
-		if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
+		if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5 || Student.studentListAudio.size()<=5)
 			studentPanel.setLayout(new GridLayout(5,1,10,10));
 		else
 			studentPanel.setLayout(new BoxLayout(studentPanel, BoxLayout.Y_AXIS));
@@ -679,7 +986,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		textPanel.removeAll();
 		studentMsg.removeAll();
 		studentMsg=new JPanel();
-		if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5)
+		if(Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())<5 || Student.studentListText.size()<=5)
 			studentMsg.setLayout(new GridLayout(5,1,10,10));
 		else
 			studentMsg.setLayout(new BoxLayout(studentMsg, BoxLayout.Y_AXIS));
