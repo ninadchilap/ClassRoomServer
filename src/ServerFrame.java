@@ -26,6 +26,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 	/*
 	  adding a menu bar
 	 */
+	static String currentlySpeakingip,filenameInServerFrame;
 	int fileNumber;
 	MenuBar menuBar;
 	Menu menu;
@@ -74,11 +75,13 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		/*
 		 *  set the look and feel to reflect the platform
 		 */
+		
 		try { 
 		    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
+		
 		/*************************/
 		ServerFrame.professorName=professorName;
 		ServerFrame.departmentName=departmentName;
@@ -91,18 +94,18 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		
 		/****************************************/
 
-    	String filename= "Images/print.txt";
+    	filenameInServerFrame= "Images/print.txt";
         FileWriter fw;
 	    try 
 	    {
 	    	int i=0;
-	    	while(new File(filename).exists())
+	    	while(new File(filenameInServerFrame).exists())
 		    {
 	    		i++;
-	    		filename="Images/print"+(i)+".txt";
+	    		filenameInServerFrame="Images/print"+(i)+".txt";
 		    }
 	    	fileNumber=i;
-		    fw = new FileWriter(filename,false);
+		    fw = new FileWriter(filenameInServerFrame,false);
 		    fw.write("Professor's Name : "+WelcomeDialog.professorsName+"\n");
 		    fw.write("Department : "+WelcomeDialog.departmentName+"\n");
 		    fw.write("Subject : "+WelcomeDialog.subjectName+"\n");
@@ -351,7 +354,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		{
 			studentNumberComboBox.addItem(""+i);
 		}
-		studentNumberComboBox.setSelectedIndex(1);
+		studentNumberComboBox.setSelectedIndex(5);
 	}
 	
 
@@ -723,6 +726,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 		{
 			if(ae.getSource()==addButton.get(i))
 			{
+				currentlySpeakingip=Student.studentListAudio.get(i).ip;
 				/*
 				 * Sending the client the permission to speak - server says - "its your turn"
 				 */
@@ -730,17 +734,30 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 				
 				gd=new GeneralDialogBox(this, Student.studentListAudio.get(i));
 				gd.setVisible(true);
-				//new NotifyAllClients(Student.studentListAudio.get(i).ip,"single_to_kick");
-				new NotifyAllClients(Student.studentListAudio.get(i).ip,"single_to_kick");
 				
-				Student.studentListAudio.remove(i);
+				System.out.println("/////////////////hellohellohellohellohellohellopppppppppppppppppppppppppppppppppppppp");
+				
+				//new NotifyAllClients(Student.studentListAudio.get(i).ip,"single_to_kick");
+				for(int j =0 ;j<Student.studentListAudio.size();j++)
+				{
+					if(Student.studentListAudio.get(j).ip.equals(currentlySpeakingip))
+					{
+						new NotifyAllClients(Student.studentListAudio.get(j).ip,"single_to_kick");
+						Student.studentListAudio.remove(j);
+					
+					}
+				}
+				
+				
+				
+				currentlySpeakingip="";
 				new NotifyAllClients("","multi");
 				
 				/*
 				 * now broadcast the respective queue number to each client
 				 */
 				//new NotifyAllClients(); // new
-				
+				/////////////////////////////////////////////////////////////////////////
 				audioPanel.removeAll();
 				studentPanel.removeAll();
 				studentPanel=new JPanel();
@@ -764,6 +781,7 @@ public class ServerFrame extends JFrame implements ActionListener,ChangeListener
 					waitingButton.setText("Waiting : "+(Student.studentListText.size()-Integer.parseInt(studentNumberComboBox.getSelectedItem().toString())));
 				else 
 					waitingButton.setText("Waiting : 0");
+				refreshFrame();
 				return;
 			}
 			if(ae.getSource()==deleteButton.get(i))

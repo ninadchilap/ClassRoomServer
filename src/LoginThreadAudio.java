@@ -78,6 +78,7 @@ class LoginThreadAudio implements Runnable
                     }
             		else // this is the case when student is requesting for the text doubt
             		{
+            			int complete=0;
             			username=dis.readUTF();
     				    roll=dis.readUTF();
     				    macid=dis.readUTF();
@@ -88,54 +89,108 @@ class LoginThreadAudio implements Runnable
     				    System.out.println("macid="+macid);
     				    System.out.println("doubtSubject="+doubtSubject);
     				    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaasssssssssssssssssssssssssssssss11111111");
-    				   ///////////////////////SEND IMAGE////////////////
-    				    
-    				    String macid2=macid;
-     				   
-     				   	macid2= macid2.replace(":","");	
-     				    //File outFile=new File("/Images/"+macid2+".jpg");
-     				    File outFile=new File("Images/"+macid2+".jpg");
-     				    System.out.println("111111111222222222"+macid2);
-     				    receiveFile(outFile);
-     				
-     				    System.out.println("file path "+outFile.getAbsolutePath());
-    				    
-    				    
-    				    
+    				   ///////////////////////SEND IMAGE with flag////////////////
+    				    String flag_image=dis.readUTF();
+    				    System.out.println("ankit ankit ankit nakit111111222222222222!!!!!!!!!"+flag_image);
+    				    if(flag_image.equals("send_image"))
+    				    {
+		    				    String macid2=macid;
+		     				     macid2= macid2.replace(":","");	
+		     				    File outFile=new File("Images/"+macid2+".jpg");
+		     				    System.out.println("111111111222222222"+macid2);
+		     				    receiveFile(outFile);
+		     				
+		     				    System.out.println("file path "+outFile.getAbsolutePath());
+		     				   ip=client.getInetAddress()+"";
+		   				    
+			   				    char ip1[]=ip.toCharArray();
+			   			        if(ip1[0]=='/')
+			   			        	ip=new String(ip1,1,ip.length()-1);
+			   			        
+			   			        new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,"","audio");
+			   			        new	ImageMacid(macid,outFile.getAbsolutePath());
+			   			        complete=1;
+    				    }
+    				    else if(flag_image.equals("not_send_image"))
+    				    {
+    				    	
+    				    	for(int i=0;i<ImageMacid.imagemacid.size()&&complete==0;i++)
+    				    	{
+    				    		if(ImageMacid.imagemacid.get(i).macid.equals(macid))
+    				    		{
+    				    			ip=client.getInetAddress()+"";
+    				    			char ip1[]=ip.toCharArray();
+    			   			        if(ip1[0]=='/')
+    			   			        	ip=new String(ip1,1,ip.length()-1);
+    				    			new Student(username,roll,macid,ip,ImageMacid.imagemacid.get(i).pic,doubtSubject,"","audio");
+    				    			complete=1;
+    				    		}
+    				    	}
+    				    	if(complete==0)
+    				    	{
+        				    	dos.writeUTF("not_done");
+        				    	String macid2=macid;
+		     				    macid2= macid2.replace(":","");	
+		     				    File outFile=new File("Images/"+macid2+".jpg");
+		     				    System.out.println("111111111222222222"+macid2);
+		     				    receiveFile(outFile);
+		     				
+		     				    System.out.println("file path "+outFile.getAbsolutePath());
+		     				    ip=client.getInetAddress()+"";
+		     				    
+			   				    char ip1[]=ip.toCharArray();
+			   			        if(ip1[0]=='/')
+			   			        	ip=new String(ip1,1,ip.length()-1);
+			   			        
+			   			        new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,"","audio");
+			   			        new	ImageMacid(macid,outFile.getAbsolutePath());
+			   			        
+			   			        complete=1;
+        				    	System.out.println("not done audio!!!!!!!!!!!!!!!!!!!");
+    				    	}
+    				        else
+    				        	dos.writeUTF("ok_done");
+    				    }
+    				   
     				    
     				    
     				    
     				    //////////////////////////////////////////////////////
-    				    ip=client.getInetAddress()+"";
-    				    
-    				    char ip1[]=ip.toCharArray();
-    			        if(ip1[0]=='/')
-    			        	ip=new String(ip1,1,ip.length()-1);
-    				    
-    				    
-    				    
-    				    //new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,"","audio");
-    				    new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,"","audio");
-
-    				    new NotifyAllClients(ip,"single");
-    				    //dos.writeUTF("received");
-    				    String disconnectAudioDoubt=dis.readUTF();
-    				    if(disconnectAudioDoubt.equals("kick_me_out"))
-    				    {
-    				    	if(ServerFrame.gd!=null)
-    				    		ServerFrame.gd.dispose();
-    				    	String currentMacId=dis.readUTF();
-    				    	for(int i=0;i<Student.studentListAudio.size();i++)
-    						{
-    							
-    							if(Student.studentListAudio.get(i).macAddress.equals(currentMacId) )
-    							{
-    								Student.studentListAudio.remove(i);
-    								ServerFrame.refreshFrame();
-    							}
-    						}
-    				    	new NotifyAllClients("", "multi");
-    				    }
+    				   if(complete==1)
+    				   {
+		    				    new NotifyAllClients(ip,"single");
+		    				    //dos.writeUTF("received");
+		    				    String disconnectAudioDoubt=dis.readUTF();
+		    				    if(disconnectAudioDoubt.equals("kick_me_out_speaking")) // when the client that is speaking requests kick_me_out
+		    				    {
+		    				    	
+		    				    	System.out.println("something is gooooooooooooooooooooing wrong");
+		    				    	if(ServerFrame.gd!=null)
+		    				    		ServerFrame.gd.dispose();
+		    				    }
+		    				    else// if(disconnectAudioDoubt.equals("kick_me_out_waiting")) // when the client that is waiting in the queue requests kick_me_out
+		    				    {
+		    				    	/*
+		    				    	 * here you dont need to close the 
+		    				    	 * general dialog box corresponding to the 
+		    				    	 * action kick_me_out
+		    				    	 */
+		    						System.out.println("0)))))))))))))))))))))))))))))))))))))))))))))))))0");
+		    						
+		    				    	String currentMacId=dis.readUTF();
+		    				    	for(int i=0;i<Student.studentListAudio.size();i++)
+		    				    	{
+		    							if(Student.studentListAudio.get(i).macAddress.equals(currentMacId))
+		    							{
+		    								Student.studentListAudio.remove(i);
+		    								
+		    								ServerFrame.refreshFrame();
+		    							}
+		    				    	}
+		    				    	new NotifyAllClients("", "multi");
+		    				    }
+    				   }
+    				    	
     				    client.close();
     				}
             		               

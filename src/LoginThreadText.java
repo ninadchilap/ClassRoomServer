@@ -94,6 +94,7 @@ class LoginThreadText implements Runnable
                     }
             		else // this is the case when student is requesting for the text doubt
             		{
+            			int complete=0;
             			username=dis.readUTF();
     				    roll=dis.readUTF();
     				    macid=dis.readUTF();
@@ -106,23 +107,69 @@ class LoginThreadText implements Runnable
     				    System.out.println("doubtSubject="+doubtSubject);
     				    System.out.println("doubtText="+doubtText);
     				    
-    				    String macid2=macid;
-    				   
-    				   macid2= macid2.replace(":","");	
-    				    //File outFile=new File("/Images/"+macid2+".jpg");
-    				    File outFile=new File("Images/"+macid2+".jpg");
-    				    System.out.println("111111111222222222"+macid2);
-    				    receiveFile(outFile);
-    				
-    				    System.out.println("file path "+outFile.getAbsolutePath());
-    				    
-    				    new print_in_file(macid,username,roll,doubtSubject,doubtText);
-    				    ip=client.getInetAddress()+"";
-    				    
-    				    char ip1[]=ip.toCharArray();
-    			        if(ip1[0]=='/')
-    			        	ip=new String(ip1,1,ip.length()-1);
-    				    new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,doubtText,"text");
+    				    String flag_image=dis.readUTF();
+    				    System.out.println("ankit ankit ankit nakit111111222222222222!!!!!!!!!"+flag_image);
+        				
+    				    if(flag_image.equals("send_image"))
+    				    {
+		    				    String macid2=macid;
+		     				     macid2= macid2.replace(":","");	
+		     				    File outFile=new File("Images/"+macid2+".jpg");
+		     				    System.out.println("111111111222222222"+macid2);
+		     				    receiveFile(outFile);
+		     				
+		     				    System.out.println("file path "+outFile.getAbsolutePath());
+		     				   ip=client.getInetAddress()+"";
+		   				    
+			   				    char ip1[]=ip.toCharArray();
+			   			        if(ip1[0]=='/')
+			   			        	ip=new String(ip1,1,ip.length()-1);
+			   			        
+			   			        new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,doubtText,"text");
+			   			        new	ImageMacid(macid,outFile.getAbsolutePath());
+			   			       
+    				    }
+    				    else if(flag_image.equals("not_send_image"))
+    				    {
+    				    	
+    				    	for(int i=0;i<ImageMacid.imagemacid.size()&&complete==0;i++)
+    				    	{
+    				    		if(ImageMacid.imagemacid.get(i).macid.equals(macid))
+    				    		{
+    				    			 ip=client.getInetAddress()+"";
+    				    			char ip1[]=ip.toCharArray();
+    			   			        if(ip1[0]=='/')
+    			   			        	ip=new String(ip1,1,ip.length()-1);
+    				    			new Student(username,roll,macid,ip,ImageMacid.imagemacid.get(i).pic,doubtSubject,doubtText,"text");
+    				    			complete=1;
+    				    		}
+    				    	}
+    				        if(complete==0)
+    				        {
+        				    	dos.writeUTF("not_done");
+        				    	String macid2=macid;
+		     				     macid2= macid2.replace(":","");	
+		     				    File outFile=new File("Images/"+macid2+".jpg");
+		     				    System.out.println("111111111222222222"+macid2);
+		     				    receiveFile(outFile);
+		     				
+		     				    System.out.println("file path "+outFile.getAbsolutePath());
+		     				    ip=client.getInetAddress()+"";
+		   				    
+			   				    char ip1[]=ip.toCharArray();
+			   			        if(ip1[0]=='/')
+			   			        	ip=new String(ip1,1,ip.length()-1);
+			   			        
+			   			        new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,doubtText,"text");
+			   			        new	ImageMacid(macid,outFile.getAbsolutePath());
+			   			    
+        				    	System.out.println("not done text!!!!!!!!!!!!!!!!!!!");
+        				    	
+    				        }
+    				        else
+    				        	dos.writeUTF("ok_done");
+    				        	
+    				    }
     				
     				    dos.writeUTF("received");
     				

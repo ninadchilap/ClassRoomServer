@@ -55,6 +55,7 @@ public class Student
 		}
 		else if(doubtType.equals("text"))// if the doubtType is audio then add the student to studentListText
 		{
+			new print_in_file(macAddress,studentName,rollno+"",doubtSubject,textMessage);
 			JButton tickButton=new JButton("\u2714");
 			JButton crossButton=new JButton("X");
 			
