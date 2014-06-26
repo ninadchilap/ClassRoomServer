@@ -17,6 +17,7 @@ class LoginThreadAudio implements Runnable
     Server server;
     BufferedImage image;
     static Thread th;
+    boolean makeEntry;
     LoginThreadAudio(Server server)
     {
     	System.out.println("Thread started");
@@ -92,6 +93,11 @@ class LoginThreadAudio implements Runnable
     				   ///////////////////////SEND IMAGE with flag////////////////
     				    String flag_image=dis.readUTF();
     				    System.out.println("ankit ankit ankit nakit111111222222222222!!!!!!!!!"+flag_image);
+    				    /*
+    				     * 
+    				     */
+    				    makeEntry=CountMacId.MacIdPrimaryKeyAudio(macid);
+    				    
     				    if(flag_image.equals("send_image"))
     				    {
 		    				    String macid2=macid;
@@ -107,8 +113,11 @@ class LoginThreadAudio implements Runnable
 			   			        if(ip1[0]=='/')
 			   			        	ip=new String(ip1,1,ip.length()-1);
 			   			        
-			   			        new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,"","audio");
-			   			        new	ImageMacid(macid,outFile.getAbsolutePath());
+			   			        if(makeEntry)
+			   			        {
+			   			        	new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,"","audio");
+			   			        	new	ImageMacid(macid,outFile.getAbsolutePath());
+			   			        }
 			   			        complete=1;
     				    }
     				    else if(flag_image.equals("not_send_image"))
@@ -122,7 +131,8 @@ class LoginThreadAudio implements Runnable
     				    			char ip1[]=ip.toCharArray();
     			   			        if(ip1[0]=='/')
     			   			        	ip=new String(ip1,1,ip.length()-1);
-    				    			new Student(username,roll,macid,ip,ImageMacid.imagemacid.get(i).pic,doubtSubject,"","audio");
+    			   			        if(makeEntry)
+    				   			        new Student(username,roll,macid,ip,ImageMacid.imagemacid.get(i).pic,doubtSubject,"","audio");
     				    			complete=1;
     				    		}
     				    	}
@@ -142,11 +152,13 @@ class LoginThreadAudio implements Runnable
 			   			        if(ip1[0]=='/')
 			   			        	ip=new String(ip1,1,ip.length()-1);
 			   			        
+			   			     if(makeEntry)
+			   			     {
 			   			        new Student(username,roll,macid,ip,outFile.getAbsolutePath(),doubtSubject,"","audio");
 			   			        new	ImageMacid(macid,outFile.getAbsolutePath());
-			   			        
-			   			        complete=1;
-        				    	System.out.println("not done audio!!!!!!!!!!!!!!!!!!!");
+			   			     }  
+			   			     complete=1;
+			   			     System.out.println("not done audio!!!!!!!!!!!!!!!!!!!");
     				    	}
     				        else
     				        	dos.writeUTF("ok_done");
@@ -156,7 +168,7 @@ class LoginThreadAudio implements Runnable
     				    
     				    
     				    //////////////////////////////////////////////////////
-    				   if(complete==1)
+    				   if(complete==1 && makeEntry)
     				   {
 		    				    new NotifyAllClients(ip,"single");
 		    				    //dos.writeUTF("received");

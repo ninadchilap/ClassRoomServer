@@ -25,6 +25,16 @@ public class CountMacId
 			this.count=1;
 			studentCountMac_id.add(this);
 		}
-	
+	public static boolean MacIdPrimaryKeyAudio(String macid)
+	{
+		for(int i=0;i<Student.studentListAudio.size();i++)
+		{
+			if(Student.studentListAudio.get(i).macAddress.equals(macid))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
 }

@@ -30,10 +30,7 @@ public class NotificationToSpeak implements Runnable
 			client_speak = new Socket(ip_client, 5570);
 			DataOutputStream dos=new DataOutputStream(client_speak.getOutputStream());
 			dos.writeUTF("start_speaking");
-
-			System.out.println("the client is now set to speaking mode...******************************************************");
-			
-			}
+		}
 			catch (Exception e) {
 			e.printStackTrace();
 

@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 import javax.swing.UIManager;
 import javax.swing.ImageIcon;
 
@@ -5,7 +7,7 @@ public class SplashScreenMain {
 
   SplashScreen screen;
 
-  public SplashScreenMain() {
+  public SplashScreenMain() throws IOException {
     // initialize the splash screen
     splashScreenInit();
     // do something here to simulate the program doing something that
@@ -39,7 +41,7 @@ public class SplashScreenMain {
     screen.setScreenVisible(true);
   }
 
-  public static void main(String[] args)
+  public static void main(String[] args) throws IOException
   {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

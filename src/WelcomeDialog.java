@@ -26,7 +26,7 @@ public class WelcomeDialog extends Dialog implements ActionListener
 	{
 		
 		super(serverFrame,true);
-		
+		this.setTitle("Login Details");
 		WelcomeDialog.professorsName=professorName;
 		WelcomeDialog.departmentName=departmentName;
 		WelcomeDialog.subjectName=subjectName;
