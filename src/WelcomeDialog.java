@@ -2,13 +2,15 @@ import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,9 +21,9 @@ public class WelcomeDialog extends Dialog implements ActionListener
 	JPanel headingPanel,middlePanel,parentPanel,leftPanel,rightPanel,buttonPanel;
 	JLabel headingLabel,nameLabel,departmentLabel,subjectLabel,topicLabel;
 	JButton okButton,cancelButton;
-	JTextField nameTextField,departmentTextField,subjectTextField,topicTextField;
+	JTextField nameTextField,subjectTextField,topicTextField;
 	public static String professorsName,departmentName,subjectName,topicName;
-	
+	JComboBox<String> departmentList;
 	WelcomeDialog(ServerFrame serverFrame,String professorName,String departmentName,String subjectName,String topicName)
 	{
 		
@@ -58,7 +60,8 @@ public class WelcomeDialog extends Dialog implements ActionListener
 		leftPanel.add(topicLabel);
 		
 		rightPanel.add(nameTextField);
-		rightPanel.add(departmentTextField);
+		//rightPanel.add(departmentTextField);
+		rightPanel.add(departmentList);
 		rightPanel.add(subjectTextField);
 		rightPanel.add(topicTextField);
 		
@@ -110,8 +113,8 @@ public class WelcomeDialog extends Dialog implements ActionListener
 		nameTextField=new JTextField();
 		nameTextField.setText(professorsName);
 		
-		departmentTextField=new JTextField();
-		departmentTextField.setText(departmentName);
+		//departmentTextField=new JTextField();
+		//departmentTextField.setText(departmentName);
 		
 		subjectTextField=new JTextField();
 		subjectTextField.setText(subjectName);
@@ -121,6 +124,26 @@ public class WelcomeDialog extends Dialog implements ActionListener
 		
 		okButton=new JButton("OK");
 		cancelButton=new JButton("Cancel");
+		
+		departmentList=new JComboBox<String>();
+		departmentList.addItem("Aerospace Engineering");
+		departmentList.addItem("Biosciences and Bioengineering");
+		departmentList.addItem("Chemical Engineering");
+		departmentList.addItem("Chemistry");
+		departmentList.addItem("Civil Engineering");
+		departmentList.addItem("Computer Science & Engineering");
+		departmentList.addItem("Earth Sciences");
+		departmentList.addItem("Electrical Engineering");
+		departmentList.addItem("Energy Science and Engineering");
+		departmentList.addItem("Humanities & Social Science");
+		departmentList.addItem("Industrial Design Center");
+		departmentList.addItem("Mathematics");
+		departmentList.addItem("Mechanical Engineering");
+		departmentList.addItem("Metallurgical Engineering & Materials Science");
+		departmentList.addItem("Physics");
+		departmentList.addItem("Other");
+		
+		departmentList.addActionListener(this);
 	}
 	/*
 	 *
@@ -135,14 +158,14 @@ public class WelcomeDialog extends Dialog implements ActionListener
 		// TODO Auto-generated method stub
 		if(ae.getSource()==okButton)
 		{
-			if(nameTextField.getText().equals("") || departmentTextField.getText().equals("") || subjectTextField.getText().equals("") || topicTextField.getText().equals(""))
+			if(nameTextField.getText().equals("")  || subjectTextField.getText().equals("") || topicTextField.getText().equals(""))
 			{
 				JOptionPane.showMessageDialog(this,"Please fill all the Fields","Field Missing",JOptionPane.ERROR_MESSAGE);
 			}
 			else
 			{
 				professorsName=nameTextField.getText();
-				departmentName=departmentTextField.getText();
+				departmentName=departmentList.getSelectedItem()+"";
 				subjectName=subjectTextField.getText();
 				topicName=topicTextField.getText();
 				this.dispose();
@@ -154,6 +177,14 @@ public class WelcomeDialog extends Dialog implements ActionListener
 				return;
 			
 			System.exit(1);
+		}
+		else if(ae.getSource()==departmentList)
+		{
+			if(departmentList.getSelectedItem().toString().equals("Other"))
+			{
+				departmentList.addItem(""+JOptionPane.showInputDialog("Enter your Department Name"));
+				departmentList.setSelectedIndex(departmentList.getItemCount()-1);
+			}
 		}
 	}
 }
