@@ -43,7 +43,7 @@ public class AudioThread implements Runnable {
 				e.printStackTrace();
 			}
 
-			byte[] receiveData = new byte[8192];
+			byte[] receiveData = new byte[4096];
 
 			
 
