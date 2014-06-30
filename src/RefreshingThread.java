@@ -36,7 +36,7 @@ public class RefreshingThread implements Runnable
 		sf.studentPanel.setBackground(Color.WHITE);
 				
 		if(Integer.parseInt(sf.studentNumberComboBox.getSelectedItem().toString())<5 || Student.studentListAudio.size()<=5)
-			sf.studentPanel.setLayout(new GridLayout(5,1,10,10));
+			sf.studentPanel.setLayout(new GridLayout(5,1,10,5));
 		else
 			sf.studentPanel.setLayout(new BoxLayout(sf.studentPanel, BoxLayout.Y_AXIS));
 		for(int i=0;i<Integer.parseInt(sf.studentNumberComboBox.getSelectedItem().toString()) && i<Student.studentListAudio.size();i++)
@@ -57,10 +57,13 @@ public class RefreshingThread implements Runnable
 		sf.studentMsg=new JPanel();
 		sf.studentMsg.setBackground(Color.WHITE);
 		if(Integer.parseInt(sf.studentNumberComboBox.getSelectedItem().toString())<5 || Student.studentListText.size()<=5)
-			sf.studentMsg.setLayout(new GridLayout(5,1,10,10));
-		else
+		{
+			System.out.println("int the if statement");
+			sf.studentMsg.setLayout(new GridLayout(5,1,5,5));
+		}else
 			sf.studentMsg.setLayout(new BoxLayout(sf.studentMsg, BoxLayout.Y_AXIS));
 			
+		System.out.println("came to the refreshing thread");
 		for(int i=0;i<Integer.parseInt(sf.studentNumberComboBox.getSelectedItem().toString()) && i<Student.studentListText.size();i++)
 		{
 			sf.studentMsg.add(sf.createStudentTextMsgPanel(i,Student.studentListText.get(i)));
