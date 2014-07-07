@@ -42,9 +42,11 @@ public class Student
 		if(doubtType.equals("audio")) // if the doubtType is audio then add the student to studentListAudio
 		{
 			textMessage="";
-			JButton tickButton=new JButton("\u2714");
-			JButton crossButton=new JButton("X");
-
+			JButton tickButton=new JButton();
+			JButton crossButton=new JButton();
+			tickButton.setIcon(new javax.swing.ImageIcon("Images/tick.png"));
+			crossButton.setIcon(new javax.swing.ImageIcon("Images/wrong.png"));
+			
 			ServerFrame.methodToAddActionListener(tickButton);
 			ServerFrame.methodToAddActionListener(crossButton);
 
@@ -55,8 +57,11 @@ public class Student
 		}
 		else if(doubtType.equals("text"))// if the doubtType is audio then add the student to studentListText
 		{
-			JButton tickButton=new JButton("\u2714");
-			JButton crossButton=new JButton("X");
+			new print_in_file(macAddress,studentName,rollno+"",doubtSubject,textMessage);
+			JButton tickButton=new JButton();
+			JButton crossButton=new JButton();
+			tickButton.setIcon(new javax.swing.ImageIcon("Images/tick.png"));
+			crossButton.setIcon(new javax.swing.ImageIcon("Images/wrong.png"));
 			
 			ServerFrame.methodToAddActionListener(tickButton);
 			ServerFrame.methodToAddActionListener(crossButton);

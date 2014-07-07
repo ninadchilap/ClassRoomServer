@@ -24,11 +24,16 @@ public class NotifyAllClients implements Runnable
            	{
 				for(int i=0;i<Student.studentListAudio.size();i++)
 				{
-					client_speak = new Socket(Student.studentListAudio.get(i).ip, 5570);
-					DataOutputStream dos=new DataOutputStream(client_speak.getOutputStream());
-					dos.writeUTF((i+1)+"");
-	
+					if(!Student.studentListAudio.get(i).ip.equals(ServerFrame.currentlySpeakingip))
+					{
+						client_speak = new Socket(Student.studentListAudio.get(i).ip, 5570);
+						DataOutputStream dos=new DataOutputStream(client_speak.getOutputStream());
+						dos.writeUTF((i+1)+"");
+					}
+					
 				}
+				//if(!ServerFrame.gd.isActive())
+				//	ServerFrame.currentlySpeakingip="";
            	}
 			else if("single".equals(type))
 			{
@@ -43,7 +48,6 @@ public class NotifyAllClients implements Runnable
 			{
 				
 				client_speak = new Socket(ip, 5570);
-				
 				DataOutputStream dos=new DataOutputStream(client_speak.getOutputStream());
 				dos.writeUTF("kick_you");
 				System.out.println("1111111111122222222222222333333333333344444444444455555555555555");
@@ -53,7 +57,8 @@ public class NotifyAllClients implements Runnable
 		}
 		catch (Exception e) 
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("client port has been closed......kaushik may be facin");
 
 		}
 		finally {

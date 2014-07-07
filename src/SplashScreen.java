@@ -30,8 +30,11 @@ public class SplashScreen extends JWindow {
     this.getContentPane().add(imageLabel, BorderLayout.CENTER);
     this.getContentPane().add(southPanel, BorderLayout.SOUTH);
     southPanel.add(progressBar, null);
-    //this.pack();
-    this.requestFocus(true);
+    //this.requestFocus(true);
+    //this.toFront();
+    //this.repaint();
+    this.setAlwaysOnTop(true);
+    this.pack();
   }
 
   public void setProgressMax(int maxProgress)

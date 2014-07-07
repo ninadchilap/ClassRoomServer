@@ -1,4 +1,4 @@
-
+import java.io.IOException;
 
 import javax.swing.UIManager;
 import javax.swing.ImageIcon;
@@ -7,15 +7,14 @@ public class SplashScreenMain {
 
   SplashScreen screen;
 
-  public SplashScreenMain() {
+  public SplashScreenMain() throws IOException {
     // initialize the splash screen
     splashScreenInit();
     // do something here to simulate the program doing something that
     // is time consuming
-    System.out.println("start the splash screen");
     for (int i = 0; i <= 2000; i++)
     {
-      for (long j=0; j<50; ++j)    //50000
+      for (long j=0; j<5; ++j)    //50000
       {
         String poop = " " + (j + i);
       }
@@ -23,10 +22,10 @@ public class SplashScreenMain {
       SplashScreen.progressBar.setValue(i);
      // screen.setProgress("Yo " + i, i);  // progress bar with a message
       //screen.setProgress(i);           // progress bar with no message
+      
     }
     splashScreenDestruct();
     //System.exit(0);
-    System.out.println("splash screen destructed");
     Server.mainExecution("","","","");
   }
 
@@ -42,7 +41,7 @@ public class SplashScreenMain {
     screen.setScreenVisible(true);
   }
 
-  public static void main(String[] args)
+  public static void main(String[] args) throws IOException
   {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

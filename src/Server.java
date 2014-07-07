@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
@@ -90,7 +91,7 @@ public class Server
     	mainExecution("","","","");
     }*/
     
-    public static void mainExecution(String professorName,String departmentName,String subjectName,String topicName)
+    public static void mainExecution(String professorName,String departmentName,String subjectName,String topicName) throws IOException
     {
 
     	/********************************************************************/
@@ -105,8 +106,14 @@ public class Server
 		 * creating various student objects 
 		 * these students have audio and text doubts
 		 */
-		
-		/*new Student("Lavish Kothari","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
+		/*new Student("Rakshit","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","DDA line algorithm","audio");
+    	new Student("Kavleen","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exceptional Handling","finally block","audio");
+    	new Student("Lavish","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","TOC","Finite Automata","audio");
+		 */
+     	/*new Student("Rakshit Kothari","159","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("Kavleen Kalra","159","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");
+    	new Student("Nonujeet","159","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Exception","please explain the null pointer exception","text");	
+		*//*new Student("Lavish Kothari","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Rakshit","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Kavleen","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
     	new Student("Nonu","147","123.123.123","","/home/lavish/Server_ClassRoom_Interaction/Server_ClassRoom_Interaction/Images/a.jpg","Computer Graphics","","audio");
@@ -147,15 +154,15 @@ public class Server
 		*/
 		new Server();
 		
-    	sf.ipLabel.setText("IP Address : "+serverIpAddress);
-		sf.sessionIdLabel.setText("Session ID : "+serverSessionId);
+    	sf.ipLabel.setText("  IP Address : "+serverIpAddress+"  ");
+		sf.sessionIdLabel.setText("  Session ID : "+serverSessionId+"  ");
 		
-		ServerFrame.ipAddressString="IP Address : "+serverIpAddress;
-		ServerFrame.sessionIdString="Session ID : "+serverSessionId;
+		ServerFrame.ipAddressString="  IP Address : "+serverIpAddress+"  ";
+		ServerFrame.sessionIdString="  Session ID : "+serverSessionId+"  ";
 		
 		
-		sf.ipLabel.setText("IP Address : "+serverIpAddress);
-		sf.sessionIdLabel.setText("Session ID : "+serverSessionId);
+		sf.ipLabel.setText("  IP Address : "+serverIpAddress+"  ");
+		sf.sessionIdLabel.setText("  Session ID : "+serverSessionId+"  ");
 		
 		/*
 		 * now starting the audio and the text thread
